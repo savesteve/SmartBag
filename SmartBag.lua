@@ -1,27 +1,66 @@
+-- *********************************************
+-- Addon Setup
+-- *********************************************
 function SmartBag_OnLoad()
 	-- The I'm alive message
-	print("<Smart Bag v0.1>")
+	print("<Smart Bag v0.6>")
 
 	-- Register slash commands
 	SlashCmdList["SMARTBAG"] = SmartBag_SlashCommand
 	SLASH_SMARTBAG1 = "/smartbag"
 	SLASH_SMARTBAG2 = "/sb"
 
+  --Setup the settings table if we don't have one already
   if (not SmartBagSettings) then
   SmartBagSettings = {}
   SmartBagSettings["AutoSellGrey"]=false
-  SmartBagSettings["EnchangingBag"]=nil
-  SmartBagSettings["MiningBag"]=nil
-  SmartBagSettings["InscriptionBag"]=nil
-  SmartBagSettings["HerbBag"]=nil
-  SmartBagSettings["AutoSortGearSet"]=true
-  SmartBagSettings["GearSetBag"]=nil
+  SmartBagSettings["EnchangingBag"]="0"
+  SmartBagSettings["MiningBag"]="0"
+  SmartBagSettings["InscriptionBag"]="0"
+  SmartBagSettings["HerbBag"]="0"
+  SmartBagSettings["GearSetBag"]="0"
+  SmartBagSettings["FirstRun"] = "0"
   end
+
+
 
 end
 
+-- Handle events
+function SmartBag_EventHandler(self, event, ...)
+ if event == "MERCHANT_SHOW" then 
+  if SmartBagSettings["AutoSellGrey"] == true then SellGrey() end
+  SortEquipmentSet(SmartBagSettings["GearSetBag"])
+
+ end
+
+ if event == "PLAYER_LOGOUT" then 
+  
+ end
+
+ if event == "ADDON_LOADED" then
+  -- Show the settings window on first run
+    if SmartBagSettings["FirstRun"] == "0" then
+      SmartBagSettings["FirstRun"] = "1"
+      SmartBagSettingsWindow:Show() end
+
+  -- Sets the button text to their current values
+    SetButttonText(SellGreyButton,SmartBagSettings["AutoSellGrey"])
+    SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"])
+
+ end
+
+end
+
+-- Slash Command Handling
+function SmartBag_SlashCommand(msg)
+  if SmartBagSettingsWindow:IsVisible() then SmartBagSettingsWindow:Hide() else SmartBagSettingsWindow:Show() end
+end
 
 
+-- *********************************************
+-- Utility Functions
+-- *********************************************
 
 -- Move a single item by name to the "targetbag"
 function SortContainerItem(search,targetbag)
@@ -30,7 +69,7 @@ function SortContainerItem(search,targetbag)
       local item = GetContainerItemLink(bag,slot)
       if item and item:find(search) then
         PickupContainerItem(bag,slot)
-        if targetbag == 0 then PutItemInBackpack() else PutItemInBag(targetbag) end
+        if targetbag == "1" then PutItemInBackpack() else PutItemInBag(targetbag) end
       end
     end
   end
@@ -46,7 +85,7 @@ function SortItemsRarity(targetbag,targetrarity)
   	  end
       if item and iRarity == targetrarity then
        PickupContainerItem(bag,slot)
-       if targetbag == 0 then PutItemInBackpack() else PutItemInBag(targetbag) end
+       if targetbag == "1" then PutItemInBackpack() else PutItemInBag(targetbag) end
       end
     end
   end
@@ -61,7 +100,7 @@ function SortItemsType(targetbag,targetfamily)
       local itemfamily = GetItemFamily(item)
       if item and itemfamily == targetfamily then
         PickupContainerItem(bag,slot)
-        if targetbag == 0 then PutItemInBackpack() else PutItemInBag(targetbag) end
+        if targetbag == "1" then PutItemInBackpack() else PutItemInBag(targetbag) end
       end
     end
   end
@@ -82,6 +121,7 @@ function SellGrey()
   end
 end
 
+-- Sort Equipement from sets into "targetbag"
 function SortEquipmentSet(targetbag)
   for equipset = 1,GetNumEquipmentSets() do 
     name, icon, lessIndex = GetEquipmentSetInfo(equipset)
@@ -121,106 +161,55 @@ function SortNonEquipmentSetItems(targetbag,rarity)
   end
 end
 
-function SmartBag_EventHandler(self, event, ...)
- if event == "MERCHANT_SHOW" then 
-  if SmartBagSettings["AutoSellGrey"] == true then SellGrey() end
- end
-
- if event == "PLAYER_LOGOUT" then 
-  
- end
- if event == "ADDON_LOADED" then
-
-  -- Sets the button text for the SellGrey toggle button
-  if SmartBagSettings["AutoSellGrey"]==true then
-    SellGreyButton:SetText("Yes")
-  else
-    SellGreyButton:SetText("No")
-  end
- end
+function BagNumberConversion(value)
+  if value == "1" then value = "0" end 
+  if value == "20" then value = "1" end
+  if value == "21" then value = "2" end
+  if value == "22" then value = "3" end
+  if value == "23" then value = "4" end
+  return value
 end
 
-   -- Bag Selection Dropdown
-   function BagDropDownMenu_OnLoad()
-       info            = {};
-       info.text       = "None";
-       info.value      = "None";
-       info.func       = FunctionCalledWhenOptionIsClicked
-       UIDropDownMenu_AddButton(info);
-       info            = {};
-       info.text       = "Backpack";
-       info.value      = "Backpack";
-       info.func       = FunctionCalledWhenOptionIsClicked 
-       UIDropDownMenu_AddButton(info);
-       info            = {};
-       info.text       = "Bag 1";
-       info.value      = "Bag 1";
-       info.func       = FunctionCalledWhenOptionIsClicked
-       UIDropDownMenu_AddButton(info);
-       info            = {};
-       info.text       = "Bag 2";
-       info.value      = "Bag 2";
-       info.func       = FunctionCalledWhenOptionIsClicked
-       UIDropDownMenu_AddButton(info);
-       info            = {};
-       info.text       = "Bag 3";
-       info.value      = "Bag 3";
-       info.func       = FunctionCalledWhenOptionIsClicked
-       UIDropDownMenu_AddButton(info);
-       info            = {};
-       info.text       = "Bag 4";
-       info.value      = "Bag 4";
-       info.func       = FunctionCalledWhenOptionIsClicked
-       UIDropDownMenu_AddButton(info);   
-     end
+-- *********************************************
+-- UI Functions
+-- *********************************************
 
-   function BagDropDownMenuButton_OnClick() 
-       ToggleDropDownMenu(1, nil, BagDropDownMenu, BagDropDownMenuButton, 0, 0);
+function SetButttonText(button,value)
+  if value == "0" then button:SetText("None") end
+  if value == "1" then button:SetText("Backpack") end
+  if value == "20" then button:SetText("Bag 1") end
+  if value == "21" then button:SetText("Bag 2") end
+  if value == "22" then button:SetText("Bag 3") end
+  if value == "23" then button:SetText("Bag 4") end
+  if value == true then button:SetText("Yes") end
+  if value == false then button:SetText("No") end
+end
+
+function UpdateSettingChoice(value)
+   if value == "0" then value = "1" 
+    elseif value == "1" then value = "20" 
+    elseif value == "20" then value = "21" 
+    elseif value == "21" then value = "22" 
+    elseif value == "22" then value = "23" 
+    elseif value == "23" then value = "0" 
+    elseif value == true then value = false
+    elseif value == false then value = true
    end
-
-   --Yes / No Dropdown
-   function YesNoDropDownMenu_OnLoad()
-       info            = {};
-       info.text       = "Yes";
-       info.value      = "Yes";
-       info.func       = FunctionCalledWhenOptionIsClicked
-       UIDropDownMenu_AddButton(info);
-       info            = {};
-       info.text       = "No";
-       info.value      = "No";
-       info.func       = FunctionCalledWhenOptionIsClicked 
-       UIDropDownMenu_AddButton(info);
-     end
-
-   function YesNoDropDownMenuButton_OnClick() 
-       ToggleDropDownMenu(2, nil, YesNoDropDownMenu, YesNoDropDownMenuButton, 0, 0);
-   end
+   return value
+end
 
 function SellGreyButton_OnClick()
-    if SmartBagSettings["AutoSellGrey"] == true then
-      SmartBagSettings["AutoSellGrey"] = false
-      SellGreyButton:SetText("No")
-    else
-      SmartBagSettings["AutoSellGrey"] = true
-      SellGreyButton:SetText("Yes")
-    end
+   SmartBagSettings["AutoSellGrey"] = UpdateSettingChoice(SmartBagSettings["AutoSellGrey"])
+   SetButttonText(SellGreyButton,SmartBagSettings["AutoSellGrey"])
+end
+
+function KeepEquipmentButton_OnClick()
+   SmartBagSettings["GearSetBag"] = UpdateSettingChoice(SmartBagSettings["GearSetBag"])
+   SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"])
+  end
+
+function OkButton_OnClick()
+  SmartBagSettingsWindow:Hide()
 end
 
 
--- Slash Command Handling
-function SmartBag_SlashCommand(msg)
-	-- if (msg == "") then print("Smart Bag!!") else print(msg) end
-	SortItemsType(21,64)
-	SortItemsType(23,16)
-	SortItemsType(21,1024)
-  SortItemsRarity(0,0)
-  SortContainerItem("Big Iron Fishing Pole", 23)
-  SortContainerItem("Hearthstone", 23)
-  SortContainerItem("Wrap of Unity", 23)
-  SortEquipmentSet(22)
-  SortNonEquipmentSetItems(0,3)
-
-  if SmartBagSettingsWindow:IsVisible() then SmartBagSettingsWindow:Hide() else SmartBagSettingsWindow:Show() end
-
-
-end
