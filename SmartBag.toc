@@ -1,0 +1,7 @@
+## Interface: 50001
+## Title : SmartBag
+## Notes: I'm terrible
+## Author: Wiefu
+## SavedVariablesPerCharacter: SmartBagSettings
+SmartBag.lua
+SmartBag.xml

@@ -1,0 +1,30 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ xsi:schemaLocation="http://www.blizzard.com/wow/ui/ 
+ ..\..\FrameXML\UI.xsd">
+  <Script File="SmartBag.lua"/>
+  <Frame name="SmartBagFrame">
+   <Scripts>
+    <OnLoad>
+   	SmartBag_OnLoad();
+   	self:RegisterEvent("MERCHANT_SHOW");
+   	self:RegisterEvent("PLAYER_LOGOUT");
+    </OnLoad>
+    <OnEvent function="SmartBag_EventHandler"/>
+   </Scripts>
+  </Frame>
+  <Frame name="SmartBagSettingsWindow">
+    <Anchors>
+      <Anchor point="CENTER"/>
+    </Anchors>
+    <Size><AbsDimension x="30" y="30"/></Size>
+    <Button name="MyAddon_Button">
+      <Anchors>
+        <Anchor point="CENTER"/>
+      </Anchors>
+    </Button>
+
+  </Frame>
+      
+
+</Ui> 
