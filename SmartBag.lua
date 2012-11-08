@@ -7,18 +7,21 @@ function SmartBag_OnLoad()
 	SLASH_SMARTBAG1 = "/smartbag"
 	SLASH_SMARTBAG2 = "/sb"
 
-    if (not SmartBagSettings) then
-    SmartBagSettings = {}
-    SmartBagSettings["AutoSellGrey"]=false
-    SmartBagSettings["EnchangingBag"]=nil
-    SmartBagSettings["MiningBag"]=nil
-    SmartBagSettings["InscriptionBag"]=nil
-    SmartBagSettings["HerbBag"]=nil
-    SmartBagSettings["AutoSortGearSet"]=true
-    SmartBagSettings["GearSetBag"]=nil
+  if (not SmartBagSettings) then
+  SmartBagSettings = {}
+  SmartBagSettings["AutoSellGrey"]=false
+  SmartBagSettings["EnchangingBag"]=nil
+  SmartBagSettings["MiningBag"]=nil
+  SmartBagSettings["InscriptionBag"]=nil
+  SmartBagSettings["HerbBag"]=nil
+  SmartBagSettings["AutoSortGearSet"]=true
+  SmartBagSettings["GearSetBag"]=nil
   end
 
 end
+
+
+
 
 -- Move a single item by name to the "targetbag"
 function SortContainerItem(search,targetbag)
@@ -119,14 +122,90 @@ function SortNonEquipmentSetItems(targetbag,rarity)
 end
 
 function SmartBag_EventHandler(self, event, ...)
- if event == "MERCHANT_SHOW"then 
+ if event == "MERCHANT_SHOW" then 
   if SmartBagSettings["AutoSellGrey"] == true then SellGrey() end
  end
 
- if event == "PLAYER_LOGOUT"then 
+ if event == "PLAYER_LOGOUT" then 
   
  end
+ if event == "ADDON_LOADED" then
+
+  -- Sets the button text for the SellGrey toggle button
+  if SmartBagSettings["AutoSellGrey"]==true then
+    SellGreyButton:SetText("Yes")
+  else
+    SellGreyButton:SetText("No")
+  end
+ end
 end
+
+   -- Bag Selection Dropdown
+   function BagDropDownMenu_OnLoad()
+       info            = {};
+       info.text       = "None";
+       info.value      = "None";
+       info.func       = FunctionCalledWhenOptionIsClicked
+       UIDropDownMenu_AddButton(info);
+       info            = {};
+       info.text       = "Backpack";
+       info.value      = "Backpack";
+       info.func       = FunctionCalledWhenOptionIsClicked 
+       UIDropDownMenu_AddButton(info);
+       info            = {};
+       info.text       = "Bag 1";
+       info.value      = "Bag 1";
+       info.func       = FunctionCalledWhenOptionIsClicked
+       UIDropDownMenu_AddButton(info);
+       info            = {};
+       info.text       = "Bag 2";
+       info.value      = "Bag 2";
+       info.func       = FunctionCalledWhenOptionIsClicked
+       UIDropDownMenu_AddButton(info);
+       info            = {};
+       info.text       = "Bag 3";
+       info.value      = "Bag 3";
+       info.func       = FunctionCalledWhenOptionIsClicked
+       UIDropDownMenu_AddButton(info);
+       info            = {};
+       info.text       = "Bag 4";
+       info.value      = "Bag 4";
+       info.func       = FunctionCalledWhenOptionIsClicked
+       UIDropDownMenu_AddButton(info);   
+     end
+
+   function BagDropDownMenuButton_OnClick() 
+       ToggleDropDownMenu(1, nil, BagDropDownMenu, BagDropDownMenuButton, 0, 0);
+   end
+
+   --Yes / No Dropdown
+   function YesNoDropDownMenu_OnLoad()
+       info            = {};
+       info.text       = "Yes";
+       info.value      = "Yes";
+       info.func       = FunctionCalledWhenOptionIsClicked
+       UIDropDownMenu_AddButton(info);
+       info            = {};
+       info.text       = "No";
+       info.value      = "No";
+       info.func       = FunctionCalledWhenOptionIsClicked 
+       UIDropDownMenu_AddButton(info);
+     end
+
+   function YesNoDropDownMenuButton_OnClick() 
+       ToggleDropDownMenu(2, nil, YesNoDropDownMenu, YesNoDropDownMenuButton, 0, 0);
+   end
+
+function SellGreyButton_OnClick()
+    if SmartBagSettings["AutoSellGrey"] == true then
+      SmartBagSettings["AutoSellGrey"] = false
+      SellGreyButton:SetText("No")
+    else
+      SmartBagSettings["AutoSellGrey"] = true
+      SellGreyButton:SetText("Yes")
+    end
+end
+
 
 -- Slash Command Handling
 function SmartBag_SlashCommand(msg)
@@ -134,8 +213,6 @@ function SmartBag_SlashCommand(msg)
 	SortItemsType(21,64)
 	SortItemsType(23,16)
 	SortItemsType(21,1024)
-	--SortItemsRarity(22,4)
-  --SortItemsRarity(22,3)
   SortItemsRarity(0,0)
   SortContainerItem("Big Iron Fishing Pole", 23)
   SortContainerItem("Hearthstone", 23)
@@ -143,18 +220,7 @@ function SmartBag_SlashCommand(msg)
   SortEquipmentSet(22)
   SortNonEquipmentSetItems(0,3)
 
-  if SmartBagSettings["AutoSellGrey"] == true then print("True Story!!") else print("Negative!") end
-  
-  SmartBagSettingsWindow = CreateFrame("FRAME", "SmartBagSettingsWindow")
-  SmartBagSettingsWindow:SetFrameStrata("BACKGROUND")
-  SmartBagSettingsWindow:SetWidth(120)
-  SmartBagSettingsWindow:SetHeight(64)
-  SmartBagSettingsWindow:SetPoint("CENTER",0,0)
-  local t = SmartBagSettingsWindow:CreateTexture(nil,"BACKGROUND")
-  t:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Factions.blp")
-  t:SetAllPoints(SmartBagSettingsWindow)
-  SmartBagSettingsWindow.texture = t
- 
+  if SmartBagSettingsWindow:IsVisible() then SmartBagSettingsWindow:Hide() else SmartBagSettingsWindow:Show() end
 
 
 end

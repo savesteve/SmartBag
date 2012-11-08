@@ -9,22 +9,77 @@
    	SmartBag_OnLoad();
    	self:RegisterEvent("MERCHANT_SHOW");
    	self:RegisterEvent("PLAYER_LOGOUT");
+    self:RegisterEvent("ADDON_LOADED");
     </OnLoad>
     <OnEvent function="SmartBag_EventHandler"/>
    </Scripts>
   </Frame>
-  <Frame name="SmartBagSettingsWindow">
+  <Frame name="SmartBagSettingsWindow" parent="UIParent" toplevel="true" enableMouse="true">
+    <Size>
+      <AbsDimension x="400" y="400" />
+    </Size>
     <Anchors>
-      <Anchor point="CENTER"/>
+      <Anchor point="CENTER" />
     </Anchors>
-    <Size><AbsDimension x="30" y="30"/></Size>
-    <Button name="MyAddon_Button">
-      <Anchors>
-        <Anchor point="CENTER"/>
-      </Anchors>
+    <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+         edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+      <BackgroundInsets>
+        <AbsInset left="11" right="12" top="12" bottom="11"/>
+      </BackgroundInsets>
+      <TileSize>
+        <AbsValue val="32"/>
+      </TileSize>
+      <EdgeSize>
+        <AbsValue val="32"/>
+      </EdgeSize>
+    </Backdrop>
+    <Frames>
+    <Button inherits="UIPanelButtonTemplate" text="Save">
+      <Size x="80" y="35"/>
+      <Anchors><Anchor point="BOTTOM" x="-45" y="15"/></Anchors>
+      <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+      <Scripts>
+      <OnClick>
+      SmartBag_SlashCommand();
+      </OnClick>
+    </Scripts>
     </Button>
-
+    <Button inherits="UIPanelButtonTemplate" name="SellGreyButton">
+      <Size x="80" y="35"/>
+      <Anchors><Anchor point="BOTTOM" x="45" y="15"/></Anchors>
+      <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+      <Scripts>
+      <OnClick>
+        SellGreyButton_OnClick();
+      </OnClick>
+    </Scripts>
+    </Button>
+    <Button name="BagDropDownMenuButton" inherits="UIDropDownMenuTemplate" id="1">
+      <Size x="80" y="35"/>
+      <Anchors><Anchor point="TOP" x="-70" y="-15"/></Anchors>
+      <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+      <Scripts>
+          <OnLoad>
+            UIDropDownMenu_Initialize(self, BagDropDownMenu_OnLoad);
+          </OnLoad>
+          <OnClick>
+              BagDropDownMenuButton_OnClick();
+          </OnClick>
+      </Scripts>
+    </Button>
+    <Button name="YesNoDropDownMenuButton" inherits="UIDropDownMenuTemplate" id="2">
+      <Size x="80" y="35"/>
+      <Anchors><Anchor point="TOP" x="70" y="-15"/></Anchors>
+      <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+      <Scripts>
+          <OnLoad>
+            UIDropDownMenu_Initialize(self, YesNoDropDownMenu_OnLoad);
+          </OnLoad>
+          <OnClick>
+              YesNoDropDownMenuButton_OnClick();
+          </OnClick>
+      </Scripts>
+    </Button>
+  </Frames>
   </Frame>
-      
-
 </Ui> 
