@@ -186,46 +186,7 @@ function SortEquipmentSet(targetbag)
     print("<SmartBag> Equipment Sorting: Available space: " .. numberOfFreeSlots)
     print("<SmartBag> Equipment Sorting: Target bag: " .. KeepEquipmentButton:GetText() )
   end
-
-
-
-
-
-
 end
-
-
-
-
-
-  -- for equipset = 1,GetNumEquipmentSets() do 
-  --   name, icon, lessIndex = GetEquipmentSetInfo(equipset)
-  --   itemArray = GetEquipmentSetItemIDs(name);
-
-  --   for itemslot = 1,19 do 
-  --     if GetItemInfo(itemArray[itemslot]) then
-  --       iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
-  --       if WhatBag(iname) == BagNumberConversion(targetbag) then
-  --       --Goodtimes
-  --       else
-  --       x = x +1
-  --       end        
-  --     end
-  --   end
-
-  --   numberOfFreeSlots, BagType = GetContainerNumFreeSlots(BagNumberConversion(targetbag))
-  --   if numberOfFreeSlots >= x then
-  --   for itemslot = 1,19 do 
-  --     if GetItemInfo(itemArray[itemslot]) then
-  --       SortContainerItem(GetItemInfo(itemArray[itemslot]),targetbag)     
-  --     end
-  --   end
-  --   else 
-    
-  --   end
-  --   x = 0
-  -- end
-
 
 
 -- Yeah... this doesn't work yet.....
