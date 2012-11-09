@@ -43,7 +43,7 @@
       <OnClick>
       OkButton_OnClick();
       </OnClick>
-    </Scripts>
+      </Scripts>
     </Button>
     <Button inherits="UIPanelButtonTemplate" name="SellGreyButton">
       <Size x="80" y="35"/>

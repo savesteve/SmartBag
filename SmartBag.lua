@@ -64,14 +64,23 @@ end
 
 -- Move a single item by name to the "targetbag"
 function SortContainerItem(search,targetbag)
-  for bag = 0,4 do
-    for slot = 1,GetContainerNumSlots(bag) do
-      local item = GetContainerItemLink(bag,slot)
-      if item and item:find(search) then
-        PickupContainerItem(bag,slot)
-        if targetbag == "1" then PutItemInBackpack() else PutItemInBag(targetbag) end
+  numberOfFreeSlots, BagType = GetContainerNumFreeSlots(BagNumberConversion(targetbag))
+  if numberOfFreeSlots >= 1 then
+    for bag = 0,4 do
+      for slot = 1,GetContainerNumSlots(bag) do
+        local item = GetContainerItemLink(bag,slot)
+        if item then 
+          iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(item)
+        end
+        if item and search == iname then
+          
+          PickupContainerItem(bag,slot)
+          if targetbag == "1" then PutItemInBackpack() else PutItemInBag(targetbag) end
+        end
       end
     end
+  else
+    
   end
 end
 
@@ -121,18 +130,102 @@ function SellGrey()
   end
 end
 
+function WhatBag(search)
+    for bag = 0,4 do
+      for slot = 1,GetContainerNumSlots(bag) do
+        local item = GetContainerItemLink(bag,slot)
+        if item and item:find(search) then
+        foundbag = bag
+        foundslot = slot
+        end
+      end
+    end
+  return foundbag
+end
+
+
+
 -- Sort Equipement from sets into "targetbag"
 function SortEquipmentSet(targetbag)
+  x = 0
   for equipset = 1,GetNumEquipmentSets() do 
     name, icon, lessIndex = GetEquipmentSetInfo(equipset)
     itemArray = GetEquipmentSetItemIDs(name);
     for itemslot = 1,19 do 
       if GetItemInfo(itemArray[itemslot]) then
-       SortContainerItem(GetItemInfo(itemArray[itemslot]),targetbag) 
+        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
+        superbag = tonumber(WhatBag(iname))
+        supertarget = tonumber(BagNumberConversion(targetbag))
+        if IsEquippedItem(ilink) == 1 or superbag == supertarget then
+          --Goodtimes 
+        else
+          x = x +1
+        end        
       end
     end
   end
+  numberOfFreeSlots, BagType = GetContainerNumFreeSlots(BagNumberConversion(targetbag))
+  if numberOfFreeSlots >= x then
+  for equipset = 1,GetNumEquipmentSets() do 
+    name, icon, lessIndex = GetEquipmentSetInfo(equipset)
+    itemArray = GetEquipmentSetItemIDs(name);
+    for itemslot = 1,19 do 
+      if GetItemInfo(itemArray[itemslot]) then
+        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
+        if IsEquippedItem(ilink) == 1 or WhatBag(iname) == BagNumberConversion(targetbag) then
+          --Goodtimes
+        else
+          SortContainerItem(iname,targetbag)
+        end        
+      end
+    end
+  end
+  else
+    print("<SmartBag> Equipment Sorting: Not enough free space.")
+    print("<SmartBag> Equipment Sorting: Required space: " .. x )
+    print("<SmartBag> Equipment Sorting: Available space: " .. numberOfFreeSlots)
+    print("<SmartBag> Equipment Sorting: Target bag: " .. KeepEquipmentButton:GetText() )
+  end
+
+
+
+
+
+
 end
+
+
+
+
+
+  -- for equipset = 1,GetNumEquipmentSets() do 
+  --   name, icon, lessIndex = GetEquipmentSetInfo(equipset)
+  --   itemArray = GetEquipmentSetItemIDs(name);
+
+  --   for itemslot = 1,19 do 
+  --     if GetItemInfo(itemArray[itemslot]) then
+  --       iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
+  --       if WhatBag(iname) == BagNumberConversion(targetbag) then
+  --       --Goodtimes
+  --       else
+  --       x = x +1
+  --       end        
+  --     end
+  --   end
+
+  --   numberOfFreeSlots, BagType = GetContainerNumFreeSlots(BagNumberConversion(targetbag))
+  --   if numberOfFreeSlots >= x then
+  --   for itemslot = 1,19 do 
+  --     if GetItemInfo(itemArray[itemslot]) then
+  --       SortContainerItem(GetItemInfo(itemArray[itemslot]),targetbag)     
+  --     end
+  --   end
+  --   else 
+    
+  --   end
+  --   x = 0
+  -- end
+
 
 
 -- Yeah... this doesn't work yet.....
@@ -211,5 +304,3 @@ function KeepEquipmentButton_OnClick()
 function OkButton_OnClick()
   SmartBagSettingsWindow:Hide()
 end
-
-
