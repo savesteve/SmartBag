@@ -14,8 +14,7 @@
     <OnEvent function="SmartBag_EventHandler"/>
    </Scripts>
   </Frame>
-
-  <Frame name="SmartBagSettingsWindow" parent="UIParent" hidden="true">
+  <Frame name="SmartBagSettingsWindow" parent="UIParent" hidden="true" movable="true">
     <Size>
       <AbsDimension x="400" y="400" />
     </Size>
@@ -55,6 +54,16 @@
       </OnClick>
     </Scripts>
     </Button>
+    <Button inherits="UIPanelButtonTemplate" name="AlertTextButton">
+      <Size x="80" y="35"/>
+      <Anchors><Anchor point="TOP" x="130" y="-120"/></Anchors>
+      <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+      <Scripts>
+      <OnClick>
+        AlertTextButton_OnClick();
+      </OnClick>
+    </Scripts>
+    </Button>
     <Button inherits="UIPanelButtonTemplate" name="KeepEquipmentButton">
       <Size x="80" y="35"/>
       <Anchors><Anchor point="TOP" x="130" y="-75"/></Anchors>
@@ -65,15 +74,46 @@
       </OnClick>
     </Scripts>
     </Button>
-    <Layers>
-      <Layer level="ARTWORK">
-        <FontString name="SellGreyLabel" text="Auto Sell Grey Items:">
-          <Anchors>
-            <Anchor point="TOP" x="-50" y="-35"/>
-          </Anchors>
-        </FontString>
-      </Layer>
-    </Layers>
   </Frames>
+    <Layers>
+    <Layer level="BACKROUND">
+        <FontString name="AutoSellGreyText" text="Auto Sell Grey Items:" inherits="GameFontNormal">
+            <Size>
+                <AbsDimension x="150" y="12"/>
+            </Size>
+            <Anchors>
+                <Anchor point="TOP">
+                    <Offset>
+                        <AbsDimension x="-105" y="-45"/>
+                    </Offset>
+                </Anchor>
+            </Anchors>
+        </FontString>
+        <FontString name="EquipmentSortText" text="Auto Sort Equipment:" inherits="GameFontNormal">
+            <Size>
+                <AbsDimension x="150" y="12"/>
+            </Size>
+            <Anchors>
+                <Anchor point="TOP">
+                    <Offset>
+                        <AbsDimension x="-105" y="-90"/>
+                    </Offset>
+                </Anchor>
+            </Anchors>
+        </FontString>
+        <FontString name="AlertText" text="Sorting Error Messages:" inherits="GameFontNormal">
+            <Size>
+                <AbsDimension x="150" y="12"/>
+            </Size>
+            <Anchors>
+                <Anchor point="TOP">
+                    <Offset>
+                        <AbsDimension x="-105" y="-130"/>
+                    </Offset>
+                </Anchor>
+            </Anchors>
+        </FontString>
+    </Layer>
+    </Layers>
   </Frame>
 </Ui> 

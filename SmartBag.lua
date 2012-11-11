@@ -20,6 +20,7 @@ function SmartBag_OnLoad()
   SmartBagSettings["HerbBag"]="0"
   SmartBagSettings["GearSetBag"]="0"
   SmartBagSettings["FirstRun"] = "0"
+  SmartBagSettings["Alerts"]=true
   end
 
 
@@ -47,6 +48,7 @@ function SmartBag_EventHandler(self, event, ...)
   -- Sets the button text to their current values
     SetButttonText(SellGreyButton,SmartBagSettings["AutoSellGrey"])
     SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"])
+    SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
 
  end
 
@@ -63,6 +65,7 @@ end
 -- *********************************************
 
 -- Move a single item by name to the "targetbag"
+-- NEED TO LOOK AT THIS: CLEANUP / SPACE CHECKING
 function SortContainerItem(search,targetbag)
   numberOfFreeSlots, BagType = GetContainerNumFreeSlots(BagNumberConversion(targetbag))
   if numberOfFreeSlots >= 1 then
@@ -80,8 +83,8 @@ function SortContainerItem(search,targetbag)
       end
     end
   else
-    
   end
+  ResetCursor()
 end
 
 -- Move all items into "targetbag" based on item rarity
@@ -98,6 +101,7 @@ function SortItemsRarity(targetbag,targetrarity)
       end
     end
   end
+  ResetCursor()
 end
 
 
@@ -113,6 +117,7 @@ function SortItemsType(targetbag,targetfamily)
       end
     end
   end
+  ResetCursor()
 end
 
 function SellGrey()
@@ -128,6 +133,7 @@ function SellGrey()
       end
     end
   end
+  ResetCursor()
 end
 
 function WhatBag(search)
@@ -181,38 +187,50 @@ function SortEquipmentSet(targetbag)
     end
   end
   else
-    print("<SmartBag> Equipment Sorting: Not enough free space.")
-    print("<SmartBag> Equipment Sorting: Required space: " .. x )
-    print("<SmartBag> Equipment Sorting: Available space: " .. numberOfFreeSlots)
-    print("<SmartBag> Equipment Sorting: Target bag: " .. KeepEquipmentButton:GetText() )
+    if SmartBagSettings["Alerts"] == true then
+      print("<SmartBag> Equipment Sorting: Not enough free space.")
+      print("<SmartBag> Equipment Sorting: Required space: " .. x )
+      print("<SmartBag> Equipment Sorting: Available space: " .. numberOfFreeSlots)
+      print("<SmartBag> Equipment Sorting: Target: " .. KeepEquipmentButton:GetText() )
+    end
   end
+  ResetCursor()
 end
 
+-- Tests the item and returns true if it is a member of any Gear Set in the equipment manager
+function IsSetItem(itemname)
+  itemsetstatus = false
+  for equipset = 1,GetNumEquipmentSets() do 
+    name, icon, lessIndex = GetEquipmentSetInfo(equipset)
+    itemArray = GetEquipmentSetItemIDs(name);
+    for itemslot = 1,19 do 
+      if GetItemInfo(itemArray[itemslot]) then
+        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
+        if itemname == iname then itemsetstatus =true
+        end
+      end
+    end
+  end
+  return itemsetstatus
+end
 
 -- Yeah... this doesn't work yet.....
-function SortNonEquipmentSetItems(targetbag,rarity)
+function SortNonEquipmentSetItems(targetbag,targetrarity)
   for bag = 0,4 do
     for slot = 1,GetContainerNumSlots(bag) do
       local item = GetContainerItemLink(bag,slot)
       if item then 
        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(item)
       end
-      
-      if item and iRarity == targetrarity then
-        for equipset = 1,GetNumEquipmentSets() do 
-        name, icon, lessIndex = GetEquipmentSetInfo(equipset)
-        itemArray = GetEquipmentSetItemIDs(name);
-
-        for itemslot = 1,19 do 
-          print(GetItemInfo(itemArray[itemslot]))
-        if GetItemInfo(itemArray[itemslot]) then
-          if iname == GetItemInfo(itemArray[itemslot]) then print("Yes") else print("No") end
-        end
-        end
-        end
+      if item and iRarity == targetrarity and IsSetItem(iname) == false then
+        SortContainerItem(iname,targetbag)
       end
     end
   end
+end
+
+function sbtest()
+  if IsSetItem("Inscribed Crane Staff") == false then print("FAIL") elseif  IsSetItem("Valley Stir Fry") == true then print("YES") end
 end
 
 function BagNumberConversion(value)
@@ -223,10 +241,6 @@ function BagNumberConversion(value)
   if value == "23" then value = "4" end
   return value
 end
-
--- *********************************************
--- UI Functions
--- *********************************************
 
 function SetButttonText(button,value)
   if value == "0" then button:SetText("None") end
@@ -252,6 +266,11 @@ function UpdateSettingChoice(value)
    return value
 end
 
+-- *********************************************
+-- UI Functions
+-- *********************************************
+
+
 function SellGreyButton_OnClick()
    SmartBagSettings["AutoSellGrey"] = UpdateSettingChoice(SmartBagSettings["AutoSellGrey"])
    SetButttonText(SellGreyButton,SmartBagSettings["AutoSellGrey"])
@@ -261,6 +280,10 @@ function KeepEquipmentButton_OnClick()
    SmartBagSettings["GearSetBag"] = UpdateSettingChoice(SmartBagSettings["GearSetBag"])
    SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"])
   end
+function AlertTextButton_OnClick()
+   SmartBagSettings["Alerts"] = UpdateSettingChoice(SmartBagSettings["Alerts"])
+   SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
+end
 
 function OkButton_OnClick()
   SmartBagSettingsWindow:Hide()
