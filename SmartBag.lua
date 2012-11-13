@@ -27,12 +27,17 @@ function SmartBag_OnLoad()
 
 end
 
+function ExecuteSorting()
+
+  SortNonEquipmentSetItems(20,2)
+  SortEquipmentSet(SmartBagSettings["GearSetBag"])
+
+end
+
 -- Handle events
 function SmartBag_EventHandler(self, event, ...)
  if event == "MERCHANT_SHOW" then 
-  if SmartBagSettings["AutoSellGrey"] == true then SellGrey() end
-  SortEquipmentSet(SmartBagSettings["GearSetBag"])
-
+  if  SmartBagSettings["AutoSellGrey"] == true then SellGrey() end
  end
 
  if event == "PLAYER_LOGOUT" then 
@@ -121,6 +126,8 @@ function SortItemsType(targetbag,targetfamily)
 end
 
 function SellGrey()
+  x = 0
+  totalsale = 0
   for bag = 0,4 do
     for slot = 1,GetContainerNumSlots(bag) do
       local item = GetContainerItemLink(bag,slot)
@@ -130,11 +137,57 @@ function SellGrey()
       if item and iRarity == 0 and ivendorPrice > 0 then
        PickupContainerItem(bag,slot)
        PickupMerchantItem(0)
+       itemcount = tonumber(GetItemCount(ilink))
+       totalsale = totalsale + (itemcount * tonumber(ivendorPrice))
+       x = x + itemcount
       end
     end
   end
+  if x > 0 and SmartBagSettings["Alerts"] == true then
+    print("<SmartBag> Total Grey Items Sold: " .. x )
+    print("<SmartBag> Total Sale Price: " .. ConvertToWoWMoney(totalsale) )
+  end
   ResetCursor()
 end
+
+function ConvertToWoWMoney(number)
+
+  if number > 9999 then
+    gold = removeDecimal((number / 10000))
+    goldtemp = gold * 10000
+    silver = removeDecimal((number - goldtemp) / 100)
+    silvertemp = silver * 100
+    copper = number - goldtemp - silvertemp
+    wowmoney = gold .. " gold " .. silver .. " silver " .. copper .. " copper"
+  elseif number > 99 then
+    silver = removeDecimal(number / 100)
+    silvertemp = silver * 100
+    copper = number - silvertemp
+    wowmoney = silver .. " silver " .. copper .. " copper"
+  elseif number then
+    wowmoney = number .. " copper"
+  end
+
+  return wowmoney
+
+end
+
+function removeDecimal(number)
+  local num = number
+  local num2 = tostring(num)
+  local found = nil
+  for i=1,100000 do
+    if string.sub(num2,i,i) == "." then
+      found = i
+    end
+  end
+  if type(found) == "number" then
+    num2 = string.sub(num2,1,found-1)
+  end
+  num = tonumber(num2)
+  return num
+end
+
 
 function WhatBag(search)
     for bag = 0,4 do
@@ -286,5 +339,6 @@ function AlertTextButton_OnClick()
 end
 
 function OkButton_OnClick()
-  SmartBagSettingsWindow:Hide()
+  --SmartBagSettingsWindow:Hide()
+  ExecuteSorting()
 end
