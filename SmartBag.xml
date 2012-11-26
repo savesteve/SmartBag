@@ -2,118 +2,137 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
  xsi:schemaLocation="http://www.blizzard.com/wow/ui/ 
  ..\..\FrameXML\UI.xsd">
-  <Script File="SmartBag.lua"/>
-  <Frame name="SmartBagFrame" hidden="true">
+ <Script File="SmartBag.lua"/>
+ <Frame name="SmartBagFrame" hidden="true">
    <Scripts>
     <OnLoad>
-   	SmartBag_OnLoad();
-   	self:RegisterEvent("MERCHANT_SHOW");
-   	self:RegisterEvent("PLAYER_LOGOUT");
-    self:RegisterEvent("ADDON_LOADED");
+      SmartBag_OnLoad();
+      self:RegisterEvent("MERCHANT_SHOW");
+      self:RegisterEvent("PLAYER_LOGOUT");
+      self:RegisterEvent("ADDON_LOADED");
+      self:RegisterEvent("PLAYER_LEAVE_COMBAT");
+      self:RegisterEvent("LeftButton");
     </OnLoad>
     <OnEvent function="SmartBag_EventHandler"/>
-   </Scripts>
-  </Frame>
-  <Frame name="SmartBagSettingsWindow" parent="UIParent" hidden="true" movable="true">
-    <Size>
-      <AbsDimension x="400" y="400" />
-    </Size>
-    <Anchors>
-      <Anchor point="CENTER" />
-    </Anchors>
-    <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
-         edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-      <BackgroundInsets>
-        <AbsInset left="11" right="12" top="12" bottom="11"/>
-      </BackgroundInsets>
-      <TileSize>
-        <AbsValue val="32"/>
-      </TileSize>
-      <EdgeSize>
-        <AbsValue val="32"/>
-      </EdgeSize>
-    </Backdrop>
-    <Frames>
-    <Button inherits="UIPanelButtonTemplate" text="OK">
-      <Size x="80" y="35"/>
-      <Anchors><Anchor point="BOTTOM" y="15"/></Anchors>
-      <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
-      <Scripts>
+  </Scripts>
+</Frame>
+<Frame name="SmartBagSettingsWindow" parent="UIParent" hidden="true" movable="true">
+  <Size>
+    <AbsDimension x="400" y="400" />
+  </Size>
+  <Anchors>
+    <Anchor point="CENTER" />
+  </Anchors>
+  <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+   edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+   <BackgroundInsets>
+    <AbsInset left="11" right="12" top="12" bottom="11"/>
+  </BackgroundInsets>
+  <TileSize>
+    <AbsValue val="32"/>
+  </TileSize>
+  <EdgeSize>
+    <AbsValue val="32"/>
+  </EdgeSize>
+</Backdrop>
+<Scripts>
+  <OnLoad>self:RegisterForDrag("LeftButton");</OnLoad>
+  <OnDragStart>self:StartMoving();</OnDragStart>
+  <OnDragStop>self:StopMovingOrSizing();</OnDragStop>
+</Scripts>
+<Frames>
+  <Button inherits="UIPanelButtonTemplate" text="OK">
+    <Size x="80" y="35"/>
+    <Anchors><Anchor point="BOTTOM" y="15"/></Anchors>
+    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+    <Scripts>
       <OnClick>
-      OkButton_OnClick();
+        OkButton_OnClick();
       </OnClick>
-      </Scripts>
-    </Button>
-    <Button inherits="UIPanelButtonTemplate" name="SellGreyButton">
-      <Size x="80" y="35"/>
-      <Anchors><Anchor point="TOP" x="130" y="-35"/></Anchors>
-      <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
-      <Scripts>
+    </Scripts>
+  </Button>
+  <Button inherits="UIPanelButtonTemplate" name="SellGreyButton">
+    <Size x="80" y="35"/>
+    <Anchors><Anchor point="TOP" x="130" y="-35"/></Anchors>
+    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+    <Scripts>
       <OnClick>
         SellGreyButton_OnClick();
       </OnClick>
     </Scripts>
-    </Button>
-    <Button inherits="UIPanelButtonTemplate" name="AlertTextButton">
-      <Size x="80" y="35"/>
-      <Anchors><Anchor point="TOP" x="130" y="-120"/></Anchors>
-      <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
-      <Scripts>
+  </Button>
+  <Button inherits="UIPanelButtonTemplate" name="AlertTextButton">
+    <Size x="80" y="35"/>
+    <Anchors><Anchor point="TOP" x="130" y="-120"/></Anchors>
+    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+    <Scripts>
       <OnClick>
         AlertTextButton_OnClick();
       </OnClick>
     </Scripts>
-    </Button>
-    <Button inherits="UIPanelButtonTemplate" name="KeepEquipmentButton">
-      <Size x="80" y="35"/>
-      <Anchors><Anchor point="TOP" x="130" y="-75"/></Anchors>
-      <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
-      <Scripts>
+  </Button>
+  <Button inherits="UIPanelButtonTemplate" name="KeepEquipmentButton">
+    <Size x="80" y="35"/>
+    <Anchors><Anchor point="TOP" x="130" y="-75"/></Anchors>
+    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+    <Scripts>
       <OnClick>
         KeepEquipmentButton_OnClick();
       </OnClick>
     </Scripts>
-    </Button>
-  </Frames>
-    <Layers>
-    <Layer level="BACKROUND">
-        <FontString name="AutoSellGreyText" text="Auto Sell Grey Items:" inherits="GameFontNormal">
-            <Size>
-                <AbsDimension x="150" y="12"/>
-            </Size>
-            <Anchors>
-                <Anchor point="TOP">
-                    <Offset>
-                        <AbsDimension x="-105" y="-45"/>
-                    </Offset>
-                </Anchor>
-            </Anchors>
-        </FontString>
-        <FontString name="EquipmentSortText" text="Auto Sort Equipment:" inherits="GameFontNormal">
-            <Size>
-                <AbsDimension x="150" y="12"/>
-            </Size>
-            <Anchors>
-                <Anchor point="TOP">
-                    <Offset>
-                        <AbsDimension x="-105" y="-90"/>
-                    </Offset>
-                </Anchor>
-            </Anchors>
-        </FontString>
-        <FontString name="AlertText" text="Sorting Error Messages:" inherits="GameFontNormal">
-            <Size>
-                <AbsDimension x="150" y="12"/>
-            </Size>
-            <Anchors>
-                <Anchor point="TOP">
-                    <Offset>
-                        <AbsDimension x="-105" y="-130"/>
-                    </Offset>
-                </Anchor>
-            </Anchors>
-        </FontString>
-    </Layer>
-    </Layers>
-  </Frame>
+  </Button>
+</Frames>
+<Layers>
+  <Layer level="BACKROUND">
+    <FontString name="SmartBagTitle" text="SmartBag v0.7" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="" y="-20"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+    <FontString name="AutoSellGreyText" text="Auto Sell Grey Items:" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="-105" y="-45"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+    <FontString name="EquipmentSortText" text="Auto Sort Equipment:" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="-105" y="-90"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+    <FontString name="AlertText" text="Sorting Error Messages:" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="-105" y="-130"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+  </Layer>
+</Layers>
+</Frame>
 </Ui> 

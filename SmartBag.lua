@@ -3,7 +3,7 @@
 -- *********************************************
 function SmartBag_OnLoad()
 	-- The I'm alive message
-	print("<Smart Bag v0.6>")
+	print("<Smart Bag v0.7>")
 
 	-- Register slash commands
 	SlashCmdList["SMARTBAG"] = SmartBag_SlashCommand
@@ -42,6 +42,11 @@ function SmartBag_EventHandler(self, event, ...)
 
  if event == "PLAYER_LOGOUT" then 
   
+ end
+
+ if event == "PLAYER_LEAVE_COMBAT" then
+  print("MONKEY!!")
+  ExecuteSorting()
  end
 
  if event == "ADDON_LOADED" then
@@ -171,7 +176,7 @@ function ConvertToWoWMoney(number)
   return wowmoney
 
 end
-
+ 
 function removeDecimal(number)
   local num = number
   local num2 = tostring(num)
@@ -339,6 +344,5 @@ function AlertTextButton_OnClick()
 end
 
 function OkButton_OnClick()
-  --SmartBagSettingsWindow:Hide()
-  ExecuteSorting()
+  SmartBagSettingsWindow:Hide()
 end
