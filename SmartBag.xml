@@ -81,10 +81,20 @@
       </OnClick>
     </Scripts>
   </Button>
+  <Button inherits="UIPanelButtonTemplate" name="GreenSortButton">
+    <Size x="80" y="35"/>
+    <Anchors><Anchor point="TOP" x="130" y="-160"/></Anchors>
+    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+    <Scripts>
+      <OnClick>
+        GreenSortButton_OnClick();
+      </OnClick>
+    </Scripts>
+  </Button>
 </Frames>
 <Layers>
   <Layer level="BACKROUND">
-    <FontString name="SmartBagTitle" text="SmartBag v0.7" inherits="GameFontNormal">
+    <FontString name="SmartBagTitle" text="SmartBag v0.8" inherits="GameFontNormal">
       <Size>
         <AbsDimension x="150" y="12"/>
       </Size>
@@ -120,7 +130,7 @@
         </Anchor>
       </Anchors>
     </FontString>
-    <FontString name="AlertText" text="Sorting Error Messages:" inherits="GameFontNormal">
+    <FontString name="AlertText" text="Sorting Messages:" inherits="GameFontNormal">
       <Size>
         <AbsDimension x="150" y="12"/>
       </Size>
@@ -128,6 +138,18 @@
         <Anchor point="TOP">
           <Offset>
             <AbsDimension x="-105" y="-130"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+    <FontString name="GreenSort" text="Extra Green Sorting:" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="-105" y="-170"/>
           </Offset>
         </Anchor>
       </Anchors>
