@@ -57,11 +57,24 @@ function SmartBag_EventHandler(self, event, ...)
       SmartBagSettingsWindow:Show() end
 
   -- Sets the button text to their current values
+  if  SmartBagSettings["AutoSellGrey"] then 
+    SetButttonText(SellGreyButton,SmartBagSettings["AutoSellGrey"]) else
+    SmartBagSettings["AutoSellGrey"] = false
     SetButttonText(SellGreyButton,SmartBagSettings["AutoSellGrey"])
+  end
+  if  SmartBagSettings["GearSetBag"] then 
+    SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"]) else
+    SmartBagSettings["GearSetBag"]="0"
     SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"])
-    SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
+  end
+  if  SmartBagSettings["GreenSort"] then 
+    SetButttonText(GreenSortButton,SmartBagSettings["GreenSort"]) else
+    SmartBagSettings["GreenSort"]="0"
     SetButttonText(GreenSortButton,SmartBagSettings["GreenSort"])
-
+  end
+  
+  SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
+  
  end
 
 end
