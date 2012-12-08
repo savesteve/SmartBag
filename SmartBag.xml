@@ -41,16 +41,6 @@
   <OnDragStop>self:StopMovingOrSizing();</OnDragStop>
 </Scripts>
 <Frames>
-  <Button inherits="UIPanelButtonTemplate" text="OK">
-    <Size x="80" y="35"/>
-    <Anchors><Anchor point="BOTTOM" y="15"/></Anchors>
-    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
-    <Scripts>
-      <OnClick>
-        OkButton_OnClick();
-      </OnClick>
-    </Scripts>
-  </Button>
   <Button inherits="UIPanelButtonTemplate" name="SellGreyButton">
     <Size x="80" y="35"/>
     <Anchors><Anchor point="TOP" x="130" y="-35"/></Anchors>
@@ -58,16 +48,6 @@
     <Scripts>
       <OnClick>
         SellGreyButton_OnClick();
-      </OnClick>
-    </Scripts>
-  </Button>
-  <Button inherits="UIPanelButtonTemplate" name="AlertTextButton">
-    <Size x="80" y="35"/>
-    <Anchors><Anchor point="TOP" x="130" y="-120"/></Anchors>
-    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
-    <Scripts>
-      <OnClick>
-        AlertTextButton_OnClick();
       </OnClick>
     </Scripts>
   </Button>
@@ -83,7 +63,7 @@
   </Button>
   <Button inherits="UIPanelButtonTemplate" name="GreenSortButton">
     <Size x="80" y="35"/>
-    <Anchors><Anchor point="TOP" x="130" y="-160"/></Anchors>
+    <Anchors><Anchor point="TOP" x="130" y="-120"/></Anchors>
     <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
     <Scripts>
       <OnClick>
@@ -91,10 +71,30 @@
       </OnClick>
     </Scripts>
   </Button>
+  <Button inherits="UIPanelButtonTemplate" name="AlertTextButton">
+    <Size x="80" y="35"/>
+    <Anchors><Anchor point="TOP" x="130" y="-160"/></Anchors>
+    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+    <Scripts>
+      <OnClick>
+        AlertTextButton_OnClick();
+      </OnClick>
+    </Scripts>
+  </Button>
+  <Button inherits="UIPanelButtonTemplate" text="OK">
+    <Size x="80" y="35"/>
+    <Anchors><Anchor point="BOTTOM" y="15"/></Anchors>
+    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+    <Scripts>
+      <OnClick>
+        OkButton_OnClick();
+      </OnClick>
+    </Scripts>
+  </Button>
 </Frames>
 <Layers>
   <Layer level="BACKROUND">
-    <FontString name="SmartBagTitle" text="SmartBag v0.8" inherits="GameFontNormal">
+    <FontString name="SmartBagTitle" text="SmartBag v0.82" inherits="GameFontNormal">
       <Size>
         <AbsDimension x="150" y="12"/>
       </Size>
@@ -130,7 +130,7 @@
         </Anchor>
       </Anchors>
     </FontString>
-    <FontString name="AlertText" text="Sorting Messages:" inherits="GameFontNormal">
+    <FontString name="GreenSort" text="Extra Green Sorting:" inherits="GameFontNormal">
       <Size>
         <AbsDimension x="150" y="12"/>
       </Size>
@@ -142,7 +142,7 @@
         </Anchor>
       </Anchors>
     </FontString>
-    <FontString name="GreenSort" text="Extra Green Sorting:" inherits="GameFontNormal">
+    <FontString name="AlertText" text="Sorting Messages:" inherits="GameFontNormal">
       <Size>
         <AbsDimension x="150" y="12"/>
       </Size>

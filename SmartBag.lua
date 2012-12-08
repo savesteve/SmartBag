@@ -3,7 +3,7 @@
 -- *********************************************
 function SmartBag_OnLoad()
 	-- The I'm alive message
-	print("<Smart Bag v0.8>")
+	print("<Smart Bag v0.82>")
 
 	-- Register slash commands
 	SlashCmdList["SMARTBAG"] = SmartBag_SlashCommand
@@ -126,7 +126,7 @@ function SortContainerItem(search,targetbag)
           iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(item)
         end
         if item and search == iname then
-          if targetbag == 1 then 
+          if targetbag == "1" then 
             PickupContainerItem(bag,slot)
             PutItemInBackpack() else
             PickupContainerItem(bag,slot)
@@ -194,7 +194,7 @@ function SortRarity(targetrarity,targetbag)
       if item then
         iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(item)
         if iRarity == targetrarity and IsSetItem(iname) == false then
-          if targetbag == 1 then 
+          if targetbag == "1" then 
             PickupContainerItem(bag,slot)
             PutItemInBackpack() else
             PickupContainerItem(bag,slot)
