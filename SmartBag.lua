@@ -27,7 +27,7 @@ function SmartBag_OnLoad()
 
   end
 end
-
+-- THIS IS A TEST
 function ExecuteSorting()
   SortEquipmentSet(SmartBagSettings["GearSetBag"])
   SortRarity(2,SmartBagSettings["GreenSort"])
