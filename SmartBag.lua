@@ -3,7 +3,7 @@
 -- *********************************************
 function SmartBag_OnLoad()
 	-- The I'm alive message
-	print("<Smart Bag v0.82>")
+	print("<Smart Bag v0.83>")
 
 	-- Register slash commands
 	SlashCmdList["SMARTBAG"] = SmartBag_SlashCommand
@@ -28,9 +28,17 @@ function SmartBag_OnLoad()
   end
 end
 
-function ExecuteSorting()
+function ExecuteSorting(quiet)
+  if quiet == true then 
+    x = SmartBagSettings["Alerts"]
+    SmartBagSettings["Alerts"]=false
+  end
+  
   SortEquipmentSet(SmartBagSettings["GearSetBag"])
   SortRarity(2,SmartBagSettings["GreenSort"])
+  
+  if quiet == true then SmartBagSettings["Alerts"] = x end
+
 end
 
 -- Event Handlers
@@ -46,8 +54,8 @@ function SmartBag_EventHandler(self, event, ...)
   
  end
 
- if event == "PLAYER_LEAVE_COMBAT" then
-  ExecuteSorting()
+ if event == "PLAYER_REGEN_ENABLED" then
+  ExecuteSorting(true)
  end
 
  if event == "ADDON_LOADED" then
@@ -81,7 +89,7 @@ end
 
 -- Slash Commands
 function SmartBag_SlashCommand(msg)
-   if SmartBagSettingsWindow:IsVisible() then SmartBagSettingsWindow:Hide() else SmartBagSettingsWindow:Show() end
+  if SmartBagSettingsWindow:IsVisible() then SmartBagSettingsWindow:Hide() else SmartBagSettingsWindow:Show() end
 end
 
 -- *********************************************
@@ -175,6 +183,9 @@ function SortEquipmentSet(targetbag)
       end
     end
   end
+  if SmartBagSettings["Alerts"] == true then
+    print("<SmartBag> Gear Sorted To: " .. KeepEquipmentButton:GetText() )
+  end
   else
     if SmartBagSettings["Alerts"] == true then
       print("<SmartBag> Equipment Sorting: Not enough free space.")
@@ -204,51 +215,8 @@ function SortRarity(targetrarity,targetbag)
       end
     end
   end
-  ResetCursor()
-end
-
--- Sort Equipement from sets into "targetbag"
-function SortEquipmentSet(targetbag)
-  x = 0
-  for equipset = 1,GetNumEquipmentSets() do 
-    name, icon, lessIndex = GetEquipmentSetInfo(equipset)
-    itemArray = GetEquipmentSetItemIDs(name);
-    for itemslot = 1,19 do 
-      if GetItemInfo(itemArray[itemslot]) then
-        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
-        superbag = tonumber(WhatBag(iname))
-        supertarget = tonumber(BagNumberConversion(targetbag))
-        if IsEquippedItem(ilink) == 1 or superbag == supertarget then
-          --Goodtimes 
-        else
-          x = x +1
-        end        
-      end
-    end
-  end
-  numberOfFreeSlots, BagType = GetContainerNumFreeSlots(BagNumberConversion(targetbag))
-  if numberOfFreeSlots >= x then
-  for equipset = 1,GetNumEquipmentSets() do 
-    name, icon, lessIndex = GetEquipmentSetInfo(equipset)
-    itemArray = GetEquipmentSetItemIDs(name);
-    for itemslot = 1,19 do 
-      if GetItemInfo(itemArray[itemslot]) then
-        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
-        if IsEquippedItem(ilink) == 1 or WhatBag(iname) == BagNumberConversion(targetbag) then
-          --Goodtimes
-        else
-          SortContainerItem(iname,targetbag)
-        end        
-      end
-    end
-  end
-  else
-    if SmartBagSettings["Alerts"] == true then
-      print("<SmartBag> Equipment Sorting: Not enough free space.")
-      print("<SmartBag> Equipment Sorting: Required space: " .. x )
-      print("<SmartBag> Equipment Sorting: Available space: " .. numberOfFreeSlots)
-      print("<SmartBag> Equipment Sorting: Target: " .. KeepEquipmentButton:GetText() )
-    end
+  if SmartBagSettings["Alerts"] == true then
+  print("<SmartBag> Green Items Sorted To: " .. GreenSortButton:GetText())
   end
   ResetCursor()
 end
