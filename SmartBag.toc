@@ -1,6 +1,6 @@
 ## Interface: 50100
 ## Title : SmartBag
-## Notes: I'm terrible
+## Notes: Automatic Item Sorting
 ## Author: Wiefu
 ## SavedVariablesPerCharacter: SmartBagSettings
 SmartBag.lua
