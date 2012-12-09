@@ -81,7 +81,7 @@ end
 
 -- Slash Commands
 function SmartBag_SlashCommand(msg)
-  if SmartBagSettingsWindow:IsVisible() then SmartBagSettingsWindow:Hide() else SmartBagSettingsWindow:Show() end
+   if SmartBagSettingsWindow:IsVisible() then SmartBagSettingsWindow:Hide() else SmartBagSettingsWindow:Show() end
 end
 
 -- *********************************************
