@@ -16,6 +16,12 @@ function SmartBag_OnLoad()
   SmartBagSettings["Alerts"]=true
   SmartBagSettings["GreenSort"]="0"
   end
+  if (not SmartBagExtraSellItems) then
+  SmartBagExtraSellItems = {}
+  SmartBagExtraSellItems[1] = "Scroll of Intellect II"
+  SmartBagExtraSellItems[2] = "Scroll of Stamina II"
+  SmartBagExtraSellItems[3] = "Callous Axe"
+  end
   
   if SmartBagSettings["Alerts"] == true or SmartBagSettings["Alerts"] == false then
   else
@@ -223,6 +229,16 @@ function SellGrey()
        itemcount = tonumber(GetItemCount(ilink))
        totalsale = totalsale + (itemcount * tonumber(ivendorPrice))
        x = x + itemcount
+      end
+      for i,line in ipairs(SmartBagExtraSellItems) do
+        if iname == SmartBagExtraSellItems[i] then
+         PickupContainerItem(bag,slot)
+         PickupMerchantItem(0)
+         print(iname)
+         itemcount = tonumber(GetItemCount(ilink))
+         totalsale = totalsale + (itemcount * tonumber(ivendorPrice))
+         x = x + itemcount
+        end
       end
     end
   end
