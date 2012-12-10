@@ -2,44 +2,25 @@
 -- Addon Setup
 -- *********************************************
 function SmartBag_OnLoad()
-	-- The I'm alive message
-	print("<Smart Bag v0.83>")
-
-	-- Register slash commands
+	print("|cFF0066FF<SmartBag |cFFFFFF00v1.0|cFF0066FF>")
 	SlashCmdList["SMARTBAG"] = SmartBag_SlashCommand
 	SLASH_SMARTBAG1 = "/smartbag"
 	SLASH_SMARTBAG2 = "/sb"
 
-  --Setup the settings table if we don't have one already
   if (not SmartBagSettings) then
   SmartBagSettings = {}
   SmartBagSettings["AutoSellGrey"]=false
   SmartBagSettings["SortGrey"]="0"
-  SmartBagSettings["EnchangingBag"]="0"
-  SmartBagSettings["MiningBag"]="0"
-  SmartBagSettings["InscriptionBag"]="0"
-  SmartBagSettings["HerbBag"]="0"
   SmartBagSettings["GearSetBag"]="0"
   SmartBagSettings["FirstRun"] = "0"
   SmartBagSettings["Alerts"]=true
-  SmartBagSettings["BlueSort"]="0"
   SmartBagSettings["GreenSort"]="0"
   end
-  if (not SmartBagExtraSellItems) then
-  SmartBagExtraSellItems = {}
-  SmartBagExtraSellItems[1] = "Scroll of Intellect II"
-  SmartBagExtraSellItems[2] = "Scroll of Stamina II"
-  SmartBagExtraSellItems[3] = "Callous Axe"
-  end
   
-  --Bug fix for Alert settings sometimes getting a wrong value.
   if SmartBagSettings["Alerts"] == true or SmartBagSettings["Alerts"] == false then
-    --Goodtimes
   else
     SmartBagSettings["Alerts"] = true
   end
-
-
 end
 
 function ExecuteSorting(quiet)
@@ -52,10 +33,8 @@ function ExecuteSorting(quiet)
   SortRarity(2,SmartBagSettings["GreenSort"])
   
   if quiet == true then SmartBagSettings["Alerts"] = xquiet end
-
 end
 
--- Event Handlers
 function SmartBag_EventHandler(self, event, ...)
  if event == "MERCHANT_SHOW" then 
   if  SmartBagSettings["AutoSellGrey"] == true then 
@@ -64,21 +43,17 @@ function SmartBag_EventHandler(self, event, ...)
   ExecuteSorting()
  end
 
- if event == "PLAYER_LOGOUT" then 
-  
- end
-
  if event == "PLAYER_REGEN_ENABLED" then
   ExecuteSorting(true)
  end
 
  if event == "ADDON_LOADED" then
-  -- Show the settings window on first run
-    if SmartBagSettings["FirstRun"] == "0" then
-      SmartBagSettings["FirstRun"] = "1"
-      SmartBagSettingsWindow:Show() end
 
-  -- Sets the button text to their current values
+  if SmartBagSettings["FirstRun"] == "0" then
+    SmartBagSettings["FirstRun"] = "1"
+    SmartBagSettingsWindow:Show() 
+  end
+
   if  SmartBagSettings["AutoSellGrey"] then 
     SetButttonText(SellGreyButton,SmartBagSettings["AutoSellGrey"]) else
     SmartBagSettings["AutoSellGrey"] = false
@@ -98,10 +73,8 @@ function SmartBag_EventHandler(self, event, ...)
   SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
   
  end
-
 end
 
--- Slash Commands
 function SmartBag_SlashCommand(msg)
   if SmartBagSettingsWindow:IsVisible() then SmartBagSettingsWindow:Hide() else SmartBagSettingsWindow:Show() end
 end
@@ -157,12 +130,10 @@ function SortContainerItem(search,targetbag)
         end
       end
     end
-  else
   end
   ResetCursor()
 end
 
--- Sort Equipement from sets into "targetbag"
 function SortEquipmentSet(targetbag)
   x = 0
   for equipset = 1,GetNumEquipmentSets() do 
@@ -198,21 +169,20 @@ function SortEquipmentSet(targetbag)
     end
   end
   if SmartBagSettings["Alerts"] == true then
-    print("<SmartBag> Gear Sorted To: " .. KeepEquipmentButton:GetText() )
+    print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFFFFFF00" .. KeepEquipmentButton:GetText() )
   end
   else
     if SmartBagSettings["Alerts"] == true then
-      print("<SmartBag> Equipment Sorting: Not enough free space.")
-      print("<SmartBag> Equipment Sorting: Required space: " .. x )
-      print("<SmartBag> Equipment Sorting: Available space: " .. numberOfFreeSlots)
-      print("<SmartBag> Equipment Sorting: Target: " .. KeepEquipmentButton:GetText() )
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Not enough free space.")
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Required space: " .. x )
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Available space: " .. numberOfFreeSlots)
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Target: " .. KeepEquipmentButton:GetText() )
     end
   end
   ResetCursor()
 end
 
 function SortRarity(targetrarity,targetbag)
-  --targetrarity 0-10 , targetbag 1(backpack),20-23(bags),IncSet 0/1
   for bag = 0,4 do
     for slot = 1,GetContainerNumSlots(bag) do
       local item = GetContainerItemLink(bag,slot)
@@ -230,7 +200,7 @@ function SortRarity(targetrarity,targetbag)
     end
   end
   if SmartBagSettings["Alerts"] == true then
-  print("<SmartBag> Green Items Sorted To: " .. GreenSortButton:GetText())
+  print("|cFF0066FF<SmartBag> |rGreen Items Sorted To: |cFFFFFF00" .. GreenSortButton:GetText())
   end
   ResetCursor()
 end
@@ -251,20 +221,11 @@ function SellGrey()
        totalsale = totalsale + (itemcount * tonumber(ivendorPrice))
        x = x + itemcount
       end
-      -- for i,line in ipairs(SmartBagExtraSellItems) do
-      --   if iname == SmartBagExtraSellItems[i] then
-      --    PickupContainerItem(bag,slot)
-      --    PickupMerchantItem(0)
-      --    itemcount = tonumber(GetItemCount(ilink))
-      --    totalsale = totalsale + (itemcount * tonumber(ivendorPrice))
-      --    x = x + itemcount
-      --   end
-      -- end
     end
   end
   if x > 0 and SmartBagSettings["Alerts"] == true then
-    print("<SmartBag> Total Items Sold: " .. x )
-    print("<SmartBag> Total Sale Price: " .. ConvertToWoWMoney(totalsale) )
+    print("|cFF0066FF<SmartBag> |rTotal Items Sold: |cFFFFFF00" .. x )
+    print("|cFF0066FF<SmartBag> |rTotal Sale Price: |cFFFFFF00" .. ConvertToWoWMoney(totalsale) )
   end
   ResetCursor()
 end
@@ -356,7 +317,7 @@ function WhatBag(search)
   return foundbag
 end
 
--- Tests the item and returns true if it is a member of any Gear Set in the equipment manager
+
 function IsSetItem(itemname)
   itemsetstatus = false
   for equipset = 1,GetNumEquipmentSets() do 
