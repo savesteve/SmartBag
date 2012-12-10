@@ -234,12 +234,12 @@ function SellGrey()
         if iname == SmartBagExtraSellItems[i] then
          PickupContainerItem(bag,slot)
          PickupMerchantItem(0)
-         print(iname)
          itemcount = tonumber(GetItemCount(ilink))
          totalsale = totalsale + (itemcount * tonumber(ivendorPrice))
          x = x + itemcount
         end
       end
+      iname = nil
     end
   end
   if x > 0 and SmartBagSettings["Alerts"] == true then
@@ -335,7 +335,6 @@ function WhatBag(search)
     end
   return foundbag
 end
-
 
 function IsSetItem(itemname)
   itemsetstatus = false
