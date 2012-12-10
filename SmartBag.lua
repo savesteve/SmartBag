@@ -116,6 +116,12 @@ function OkButton_OnClick()
   SmartBagSettingsWindow:Hide()
 end
 
+function SmartBagScrollBar_Update()
+ FauxScrollFrame_Update(SmartBagScrollBar,50,5,16);
+ -- 50 is max entries, 5 is number of lines, 16 is pixel height of each line
+ DEFAULT_CHAT_FRAME:AddMessage("We're at "..FauxScrollFrame_GetOffset(SmartBagScrollBar));
+end
+
 -- *********************************************
 -- Sorting Functions
 -- *********************************************
