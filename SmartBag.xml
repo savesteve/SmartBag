@@ -35,7 +35,10 @@
   </EdgeSize>
 </Backdrop>
 <Scripts>
-  <OnLoad>self:RegisterForDrag("LeftButton");</OnLoad>
+  <OnLoad>
+    self:RegisterForDrag("LeftButton");
+    tinsert(UISpecialFrames, self:GetName());
+  </OnLoad>
   <OnDragStart>self:StartMoving();</OnDragStart>
   <OnDragStop>self:StopMovingOrSizing();</OnDragStop>
 </Scripts>
@@ -153,6 +156,75 @@
         </Anchor>
       </Anchors>
     </FontString>
+  </Layer>
+</Layers>
+</Frame>
+<Frame name="SmartBagExtraItemWindow" parent="UIParent" hidden="true" movable="true">
+  <Size>
+    <AbsDimension x="400" y="400" />
+  </Size>
+  <Anchors>
+    <Anchor point="CENTER" />
+  </Anchors>
+  <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+   edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+   <BackgroundInsets>
+    <AbsInset left="11" right="12" top="12" bottom="11"/>
+  </BackgroundInsets>
+  <TileSize>
+    <AbsValue val="32"/>
+  </TileSize>
+  <EdgeSize>
+    <AbsValue val="32"/>
+  </EdgeSize>
+</Backdrop>
+<Scripts>
+  <OnLoad>
+    <!--> self:RegisterForDrag("LeftButton"); <!-->
+    tinsert(UISpecialFrames, self:GetName());
+  </OnLoad>
+  <OnDragStart>self:StartMoving();</OnDragStart>
+  <OnDragStop>self:StopMovingOrSizing();</OnDragStop>
+</Scripts>
+<Frames>
+   <ScrollFrame name="SmartBagScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="-8"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="BOTTOMRIGHT">
+            <Offset>
+              <AbsDimension x="-30" y="8"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnVerticalScroll>
+            FauxScrollFrame_OnVerticalScroll(self, offset, 16, SmartBagScrollBar_Update);
+          </OnVerticalScroll>
+          <OnShow>
+            SmartBagScrollBar_Update()
+          </OnShow>
+        </Scripts>
+      </ScrollFrame>
+</Frames>
+<Layers>
+  <Layer level="BACKROUND">
+    <FontString name="SmartBagTitle" text="SmartBag v1.0" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="" y="-20"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+    
   </Layer>
 </Layers>
 </Frame>
