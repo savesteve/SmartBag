@@ -31,6 +31,14 @@ function SmartBag_OnLoad()
   SmartBagExtraSellItems[2] = "Scroll of Stamina II"
   SmartBagExtraSellItems[3] = "Callous Axe"
   end
+  
+  --Bug fix for Alert settings sometimes getting a wrong value.
+  if SmartBagSettings["Alerts"] == true or SmartBagSettings["Alerts"] == false then
+    --Goodtimes
+  else
+    SmartBagSettings["Alerts"] == true
+  end
+
 
 end
 
