@@ -36,7 +36,7 @@ function SmartBag_OnLoad()
   if SmartBagSettings["Alerts"] == true or SmartBagSettings["Alerts"] == false then
     --Goodtimes
   else
-    SmartBagSettings["Alerts"] == true
+    SmartBagSettings["Alerts"] = true
   end
 
 
