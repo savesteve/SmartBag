@@ -24,20 +24,26 @@ function SmartBag_OnLoad()
   SmartBagSettings["Alerts"]=true
   SmartBagSettings["BlueSort"]="0"
   SmartBagSettings["GreenSort"]="0"
-
   end
+  if (not SmartBagExtraSellItems) then
+  SmartBagExtraSellItems = {}
+  SmartBagExtraSellItems[1] = "Scroll of Intellect II"
+  SmartBagExtraSellItems[2] = "Scroll of Stamina II"
+  SmartBagExtraSellItems[3] = "Callous Axe"
+  end
+
 end
 
 function ExecuteSorting(quiet)
   if quiet == true then 
-    x = SmartBagSettings["Alerts"]
+    xquiet = SmartBagSettings["Alerts"]
     SmartBagSettings["Alerts"]=false
   end
   
   SortEquipmentSet(SmartBagSettings["GearSetBag"])
   SortRarity(2,SmartBagSettings["GreenSort"])
   
-  if quiet == true then SmartBagSettings["Alerts"] = x end
+  if quiet == true then SmartBagSettings["Alerts"] = xquiet end
 
 end
 
@@ -237,10 +243,19 @@ function SellGrey()
        totalsale = totalsale + (itemcount * tonumber(ivendorPrice))
        x = x + itemcount
       end
+      -- for i,line in ipairs(SmartBagExtraSellItems) do
+      --   if iname == SmartBagExtraSellItems[i] then
+      --    PickupContainerItem(bag,slot)
+      --    PickupMerchantItem(0)
+      --    itemcount = tonumber(GetItemCount(ilink))
+      --    totalsale = totalsale + (itemcount * tonumber(ivendorPrice))
+      --    x = x + itemcount
+      --   end
+      -- end
     end
   end
   if x > 0 and SmartBagSettings["Alerts"] == true then
-    print("<SmartBag> Total Grey Items Sold: " .. x )
+    print("<SmartBag> Total Items Sold: " .. x )
     print("<SmartBag> Total Sale Price: " .. ConvertToWoWMoney(totalsale) )
   end
   ResetCursor()
