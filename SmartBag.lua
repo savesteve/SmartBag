@@ -2,7 +2,7 @@
 -- Addon Setup
 -- *********************************************
 function SmartBag_OnLoad()
-	print("|cFF0066FF<SmartBag |cFFFFFF00v1.01|cFF0066FF>")
+	print("|cFF0066FF<SmartBag |cFFFFFF00v2.0|cFF0066FF>")
 	SlashCmdList["SMARTBAG"] = SmartBag_SlashCommand
 	SLASH_SMARTBAG1 = "/smartbag"
 	SLASH_SMARTBAG2 = "/sb"
