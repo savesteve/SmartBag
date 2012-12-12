@@ -54,7 +54,12 @@ function SmartBag_EventHandler(self, event, ...)
  end
 
  if event == "ADDON_LOADED" then
-
+  --Debug test data
+  MyModData = {}
+  for i=1,50 do
+    MyModData[i] = "Test "..math.random(100)
+  end
+  
   if SmartBagSettings["FirstRun"] == "0" then
     SmartBagSettings["FirstRun"] = "1"
     SmartBagSettingsWindow:Show() 
@@ -117,9 +122,16 @@ function OkButton_OnClick()
 end
 
 function SmartBagScrollBar_Update()
- FauxScrollFrame_Update(SmartBagScrollBar,50,5,16);
- -- 50 is max entries, 5 is number of lines, 16 is pixel height of each line
- DEFAULT_CHAT_FRAME:AddMessage("We're at "..FauxScrollFrame_GetOffset(SmartBagScrollBar));
+  local line; 
+  local lineplusoffset; 
+  FauxScrollFrame_Update(SmartBagScrollBar,50,5,16);
+  DEFAULT_CHAT_FRAME:AddMessage("We're at "..FauxScrollFrame_GetOffset(SmartBagScrollBar));
+end
+
+function ExtraSellItemButton_OnClick()
+  SmartBagSettingsWindow:Hide()
+  SmartBagExtraItemWindow:Show()
+  SmartBagScrollBar:Show()
 end
 
 -- *********************************************

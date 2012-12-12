@@ -22,8 +22,7 @@
   <Anchors>
     <Anchor point="CENTER" />
   </Anchors>
-  <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
-   edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+  <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
    <BackgroundInsets>
     <AbsInset left="11" right="12" top="12" bottom="11"/>
   </BackgroundInsets>
@@ -80,6 +79,16 @@
     <Scripts>
       <OnClick>
         AlertTextButton_OnClick();
+      </OnClick>
+    </Scripts>
+  </Button>
+  <Button inherits="UIPanelButtonTemplate" name="ExtraSellItemButton" text="Extra">
+    <Size x="80" y="35"/>
+    <Anchors><Anchor point="TOP" x="130" y="-200"/></Anchors>
+    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+    <Scripts>
+      <OnClick>
+        ExtraSellItemButton_OnClick();
       </OnClick>
     </Scripts>
   </Button>
@@ -166,8 +175,7 @@
   <Anchors>
     <Anchor point="CENTER" />
   </Anchors>
-  <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
-   edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+  <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
    <BackgroundInsets>
     <AbsInset left="11" right="12" top="12" bottom="11"/>
   </BackgroundInsets>
@@ -180,14 +188,14 @@
 </Backdrop>
 <Scripts>
   <OnLoad>
-    <!--> self:RegisterForDrag("LeftButton"); <!-->
+    self:RegisterForDrag("LeftButton"); 
     tinsert(UISpecialFrames, self:GetName());
   </OnLoad>
   <OnDragStart>self:StartMoving();</OnDragStart>
   <OnDragStop>self:StopMovingOrSizing();</OnDragStop>
 </Scripts>
 <Frames>
-   <ScrollFrame name="SmartBagScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
+   <ScrollFrame name="SmartBagScrollBar" parent="SmartBagExtraItemWindow" inherits="FauxScrollFrameTemplate" hidden="true">
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
