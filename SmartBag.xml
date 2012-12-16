@@ -3,6 +3,12 @@
  xsi:schemaLocation="http://www.blizzard.com/wow/ui/ 
  ..\..\FrameXML\UI.xsd">
  <Script File="SmartBag.lua"/>
+ <Button name = "MyModEntryTemplate" virtual="true">
+    <Size>
+      <AbsDimension x="150" y="16" />
+    </Size>
+    <NormalFont style="GameFontHighlightLeft"/>
+  </Button>
  <Frame name="SmartBagFrame" hidden="true">
    <Scripts>
     <OnLoad>
@@ -168,6 +174,8 @@
   </Layer>
 </Layers>
 </Frame>
+
+
 <Frame name="SmartBagExtraItemWindow" parent="UIParent" hidden="true" movable="true">
   <Size>
     <AbsDimension x="400" y="400" />
@@ -194,6 +202,8 @@
   <OnDragStart>self:StartMoving();</OnDragStart>
   <OnDragStop>self:StopMovingOrSizing();</OnDragStop>
 </Scripts>
+
+
 <Frames>
    <ScrollFrame name="SmartBagScrollBar" parent="SmartBagExtraItemWindow" inherits="FauxScrollFrameTemplate" hidden="true">
         <Anchors>
@@ -217,12 +227,49 @@
           </OnShow>
         </Scripts>
       </ScrollFrame>
+ <Button name="MyModEntry1" inherits="MyModEntryTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="MyModScrollBar" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="8" y="0"/>
+            </Offset>
+           </Anchor>
+        </Anchors>
+      </Button>
+      <Button name="MyModEntry2" inherits="MyModEntryTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="MyModEntry1" relativePoint="BOTTOMLEFT"/>
+        </Anchors>
+      </Button>
+      <Button name="MyModEntry3" inherits="MyModEntryTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="MyModEntry2" relativePoint="BOTTOMLEFT"/>
+        </Anchors>
+      </Button>
+      <Button name="MyModEntry4" inherits="MyModEntryTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="MyModEntry3" relativePoint="BOTTOMLEFT"/>
+        </Anchors>
+      </Button>
+      <Button name="MyModEntry5" inherits="MyModEntryTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="MyModEntry4" relativePoint="BOTTOMLEFT"/>
+        </Anchors>
+      </Button>
+
+
+
+
+
 </Frames>
+
+
+
 <Layers>
   <Layer level="BACKROUND">
-    <FontString name="SmartBagTitle" text="SmartBag v1.0" inherits="GameFontNormal">
+    <FontString name="SmartBagTitle" text="SmartBag - Extra Sell Items" inherits="GameFontNormal">
       <Size>
-        <AbsDimension x="150" y="12"/>
+        <AbsDimension x="200" y="12"/>
       </Size>
       <Anchors>
         <Anchor point="TOP">
@@ -232,7 +279,6 @@
         </Anchor>
       </Anchors>
     </FontString>
-    
   </Layer>
 </Layers>
 </Frame>
