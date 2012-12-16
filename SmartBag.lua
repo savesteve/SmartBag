@@ -27,6 +27,12 @@ function SmartBag_OnLoad()
   else
     SmartBagSettings["Alerts"] = true
   end
+
+MyModData = {}
+  for i=1,50 do
+    MyModData[i] = "Test "..math.random(100)
+  end
+  
 end
 
 function ExecuteSorting(quiet)
@@ -122,10 +128,24 @@ function OkButton_OnClick()
 end
 
 function SmartBagScrollBar_Update()
-  local line; 
-  local lineplusoffset; 
+  line = nil;
+  lineplusoffset = nil; 
   FauxScrollFrame_Update(SmartBagScrollBar,50,5,16);
-  DEFAULT_CHAT_FRAME:AddMessage("We're at "..FauxScrollFrame_GetOffset(SmartBagScrollBar));
+  -- DEFAULT_CHAT_FRAME:AddMessage("We're at "..FauxScrollFrame_GetOffset(SmartBagScrollBar));
+  
+
+ for line=1,5 do
+    lineplusoffset = line + FauxScrollFrame_GetOffset(SmartBagScrollBar);
+    -- print(lineplusoffset)
+    if lineplusoffset <= 50 then
+      _G["MyModEntry"..line]:SetText(MyModData[lineplusoffset]);
+      _G["MyModEntry"..line]:Show();
+      print(MyModData[lineplusoffset])
+    else
+      getglobal("MyModEntry"..line):Hide();
+    end
+  end
+
 end
 
 function ExtraSellItemButton_OnClick()
