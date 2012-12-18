@@ -138,21 +138,54 @@ function SmartBagScrollBar_Update()
     lineplusoffset = line + FauxScrollFrame_GetOffset(SmartBagScrollBar);
     -- print(lineplusoffset)
     if lineplusoffset <= 50 then
-      _G["MyModEntry"..line]:SetText(MyModData[lineplusoffset]);
-      _G["MyModEntry"..line]:Show();
-      print(MyModData[lineplusoffset])
+      _G["ExtraItemEntry"..line]:SetText(MyModData[lineplusoffset]);
+      _G["ExtraItemEntry"..line]:Show();
     else
-      getglobal("MyModEntry"..line):Hide();
+      getglobal("ExtraItemEntry"..line):Hide();
     end
   end
+end
 
+function SmartBagScrollBar2_Update()
+  line = nil;
+  lineplusoffset = nil; 
+  FauxScrollFrame_Update(SmartBagScrollBar2,50,5,16);
+  -- DEFAULT_CHAT_FRAME:AddMessage("We're at "..FauxScrollFrame_GetOffset(SmartBagScrollBar));
+  
+
+ for line=1,5 do
+    lineplusoffset = line + FauxScrollFrame_GetOffset(SmartBagScrollBar2);
+    -- print(lineplusoffset)
+    if lineplusoffset <= 50 then
+      _G["ExtraItemEntry"..line]:SetText(MyModData[lineplusoffset]);
+      _G["ExtraItemEntry"..line]:Show();
+    else
+      getglobal("ExtraItemEntry"..line):Hide();
+    end
+  end
 end
 
 function ExtraSellItemButton_OnClick()
   SmartBagSettingsWindow:Hide()
   SmartBagExtraItemWindow:Show()
   SmartBagScrollBar:Show()
+  SmartBagScrollBar2:Show()
+  SmartBagTestWindow:Show()
+  SmartBagTestWindow2:Show()
+  SmartBagEntryFrame1:Show()
 end
+
+function SmartBagTestWindow2_OnEnter()
+  SmartBagTestWindow2:SetBackdropColor(1,1,1,1)
+  print("MONKEY IN!")
+end
+
+function SmartBagTestWindow2_OnLeave()
+  SmartBagTestWindow2:SetBackdropColor(0,0,0,1)
+  print("MONKEY OUT!")
+end
+
+
 
 -- *********************************************
 -- Sorting Functions
