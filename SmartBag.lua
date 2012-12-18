@@ -60,12 +60,6 @@ function SmartBag_EventHandler(self, event, ...)
  end
 
  if event == "ADDON_LOADED" then
-  --Debug test data
-  MyModData = {}
-  for i=1,50 do
-    MyModData[i] = "Test "..math.random(100)
-  end
-  
   if SmartBagSettings["FirstRun"] == "0" then
     SmartBagSettings["FirstRun"] = "1"
     SmartBagSettingsWindow:Show() 
@@ -127,64 +121,57 @@ function OkButton_OnClick()
   SmartBagSettingsWindow:Hide()
 end
 
-function SmartBagScrollBar_Update()
-  line = nil;
-  lineplusoffset = nil; 
-  FauxScrollFrame_Update(SmartBagScrollBar,50,5,16);
-  -- DEFAULT_CHAT_FRAME:AddMessage("We're at "..FauxScrollFrame_GetOffset(SmartBagScrollBar));
+function SmartBagScrollBarESI_Update()
+  line = nil
+  lineplusoffset = nil
+  FauxScrollFrame_Update(SmartBagScrollBarESI,50,5,16)
+  -- DEFAULT_CHAT_FRAME:AddMessage("We're at "..FauxScrollFrame_GetOffset(SmartBagScrollBar))
   
 
  for line=1,5 do
-    lineplusoffset = line + FauxScrollFrame_GetOffset(SmartBagScrollBar);
+    lineplusoffset = line + FauxScrollFrame_GetOffset(SmartBagScrollBarESI)
     -- print(lineplusoffset)
     if lineplusoffset <= 50 then
-      _G["ExtraItemEntry"..line]:SetText(MyModData[lineplusoffset]);
-      _G["ExtraItemEntry"..line]:Show();
+      if SmartBagExtraSellItems[lineplusoffset] then
+        _G["SmartBagEntry"..line]:SetText(SmartBagExtraSellItems[lineplusoffset])
+        _G["SmartBagEntry"..line]:Show()
+      end
     else
-      getglobal("ExtraItemEntry"..line):Hide();
-    end
-  end
-end
-
-function SmartBagScrollBar2_Update()
-  line = nil;
-  lineplusoffset = nil; 
-  FauxScrollFrame_Update(SmartBagScrollBar2,50,5,16);
-  -- DEFAULT_CHAT_FRAME:AddMessage("We're at "..FauxScrollFrame_GetOffset(SmartBagScrollBar));
-  
-
- for line=1,5 do
-    lineplusoffset = line + FauxScrollFrame_GetOffset(SmartBagScrollBar2);
-    -- print(lineplusoffset)
-    if lineplusoffset <= 50 then
-      _G["ExtraItemEntry"..line]:SetText(MyModData[lineplusoffset]);
-      _G["ExtraItemEntry"..line]:Show();
-    else
-      getglobal("ExtraItemEntry"..line):Hide();
+      _G("SmartBagEntry"..line):Hide()
     end
   end
 end
 
 function ExtraSellItemButton_OnClick()
   SmartBagSettingsWindow:Hide()
-  SmartBagExtraItemWindow:Show()
-  SmartBagScrollBar:Show()
-  SmartBagScrollBar2:Show()
-  SmartBagTestWindow:Show()
-  SmartBagTestWindow2:Show()
+  SmartBagExtraSellItemWindow:Show()
+  SmartBagExtraSellItemWindowItemFrame:Show()
+  SmartBagScrollBarESI:Show()
   SmartBagEntryFrame1:Show()
+  SmartBagEntryFrame2:Show()
+  SmartBagEntryFrame3:Show()
+  SmartBagEntryFrame4:Show()
+  SmartBagEntryFrame5:Show()
 end
 
-function SmartBagTestWindow2_OnEnter()
-  SmartBagTestWindow2:SetBackdropColor(1,1,1,1)
+function SmartBagExtraSellItemWindow_OnEnter()
   print("MONKEY IN!")
 end
 
-function SmartBagTestWindow2_OnLeave()
-  SmartBagTestWindow2:SetBackdropColor(0,0,0,1)
+function SmartBagExtraSellItemWindow_OnLeave()
   print("MONKEY OUT!")
 end
 
+function  SmartBagExtraSellItemWindow_OnReceiveDrag()
+  print("AMG TEH DROP!")
+  local cursorType, info1, info2  = GetCursorInfo()
+  if cursorType == "item" then
+    iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(info2)
+    print(info2)
+    SmartBagExtraSellItems[table.getn(SmartBagExtraSellItems) + 1] = iname
+    SmartBagScrollBarESI_Update()
+  end
+end
 
 
 -- *********************************************
