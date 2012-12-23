@@ -121,53 +121,40 @@ function SmartBagScrollBarESI_Update()
   FauxScrollFrame_Update(SmartBagScrollBarESI,50,5,16)
   -- DEFAULT_CHAT_FRAME:AddMessage("We're at "..FauxScrollFrame_GetOffset(SmartBagScrollBar))
   
-
- for line=1,5 do
-    lineplusoffset = line + FauxScrollFrame_GetOffset(SmartBagScrollBarESI)
-    -- print(lineplusoffset)
-    if lineplusoffset <= 50 then
-      if SmartBagExtraSellItems[lineplusoffset] then
-        _G["SmartBagEntry"..line]:SetText(SmartBagExtraSellItems[lineplusoffset])
-        _G["SmartBagEntry"..line]:Show()
+    if table.getn(SmartBagExtraSellItems) < 10 then
+      SmartBagScrollBarESI:Hide()
+      for line=1,10 do
+        if line <= table.getn(SmartBagExtraSellItems) then
+          _G["SmartBagESIButton"..line]:SetText(SmartBagExtraSellItems[line])
+          _G["SmartBagESIButton"..line]:Show()
+        else
+          _G["SmartBagESIButton"..line]:Hide()
+        end
       end
+
     else
-      _G("SmartBagEntry"..line):Hide()
+      for line=1,10 do
+        lineplusoffset = line + FauxScrollFrame_GetOffset(SmartBagScrollBarESI)
+        SmartBagScrollBarESI:Show()
+        if lineplusoffset <= 50 then
+          if SmartBagExtraSellItems[lineplusoffset] then
+            _G["SmartBagESIButton"..line]:SetText(SmartBagExtraSellItems[lineplusoffset])
+            _G["SmartBagESIButton"..line]:Show()
+          else
+            _G["SmartBagESIButton"..line]:Hide()
+          end
+        else
+          _G["SmartBagESIButton"..line]:Hide()
+        end
+      end
     end
-  end
 end
 
 function ExtraSellItemButton_OnClick()
   SmartBagSettingsWindow:Hide()
   SmartBagExtraSellItemWindow:Show()
   SmartBagExtraSellItemWindowItemFrame:Show()
-  -- SmartBagScrollBarESI:Show()
-  SmartBagEntryFrame1:Show()
-  SmartBagEntryFrame2:Show()
-  SmartBagEntryFrame3:Show()
-  SmartBagEntryFrame4:Show()
-  -- SmartBagEntryFrame5:Show()
-
-  for line=1,5 do
-        _G["SmartBagEntry"..line]:SetText(SmartBagExtraSellItems[line])
-        _G["SmartBagEntry"..line]:Show()
-  end
-end
-
-function SmartBagExtraSellItemWindow_OnEnter(self)
-print(self:GetName() .. " IN!")
-end
-
-function SmartBagExtraSellItemWindow_OnLeave(self)
-print(self:GetName() .. " OUT!")
-end
-
-
-function SmartBagEntry_EventHandler(self, event, ...)
- if event == "RightClick" then
-  SmartBagESIEntry_OnRickClick()
- end
- SmartBagESIEntry_OnRickClick()
-
+  SmartBagScrollBarESI:Show()
 end
 
 function  SmartBagExtraSellItemWindow_OnReceiveDrag()
@@ -184,7 +171,7 @@ function  SmartBagExtraSellItemWindow_OnReceiveDrag()
     end
     if addItemConfirm == 0 then
       SmartBagExtraSellItems[table.getn(SmartBagExtraSellItems) + 1] = iname
-      -- SmartBagScrollBarESI_Update()
+      SmartBagScrollBarESI_Update()
       print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00Item added to list - " .. iname)
       ClearCursor()
     end
@@ -197,13 +184,22 @@ function SmartBagESIClearListButton()
   SmartBagExtraSellItems[2] = "Scroll of Stamina II"
   SmartBagExtraSellItems[3] = "Callous Axe"
   SmartBagScrollBarESI_Update()
+  print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00LIST CLEARED")
 end
 
-function SmartBagESIEntry_OnRickClick(self)
-print("RIGHT CLICKY!")
-print(self)
-end
 
+function SmartBagESIRemoveItem(self)
+
+local target = self:GetText()
+
+for i,line in ipairs(SmartBagExtraSellItems) do
+        if target == SmartBagExtraSellItems[i] then
+          table.remove(SmartBagExtraSellItems, i)
+          print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00Item removed from list - " .. target)
+          SmartBagScrollBarESI_Update()
+        end
+    end
+end
 
 -- *********************************************
 -- Sorting Functions
@@ -396,6 +392,12 @@ function ConvertToWoWMoney(number)
 
 end
  
+function OptomizeArray(sourcearray)
+  optArray = {}
+  -- for 1,table.getn(sourcearray)
+  -- end
+end
+
 function removeDecimal(number)
   local num = number
   local num2 = tostring(num)
