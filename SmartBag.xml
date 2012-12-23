@@ -172,30 +172,27 @@
 <!-- ******************************** Templates ******************************** -->
 <!-- ******************************** Templates ******************************** -->
 
-<Frame name="SmartBagEntryTemplate" parent="SmartBagExtraSellItemWindowItemFrame" hidden="true" virtual="true">
- <Size>
-  <AbsDimension x="150" y="14" />
-</Size>
-<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" >
- <BackgroundInsets>
-  <AbsInset left="11" right="12" top="12" bottom="11"/>    
-</BackgroundInsets>
-</Backdrop>
-<Scripts>
-  <OnLoad>
-    tinsert(UISpecialFrames, self:GetName());
-    self:RegisterEvent("LeftButton");
-  </OnLoad>
-<!--   <OnClick> SmartBagExtraSellItemWindow_OnEnter(self) </OnClick> -->
-  <OnEnter> SmartBagExtraSellItemWindow_OnEnter(self) </OnEnter>
-  <OnLeave> SmartBagExtraSellItemWindow_OnLeave(self) </OnLeave>
-<!--   <OnEvent function="SmartBagEntry_EventHandler"/> -->
-  <OnEvent> print("Hello World! Hello " .. event); </OnEvent>
-  <OnReceiveDrag>SmartBagExtraSellItemWindow_OnReceiveDrag()</OnReceiveDrag>
-</Scripts>
-</Frame>
-
-
+<Button name="SmartBagESIButtonTemplate" hidden="true" virtual="true">
+  <Size x="150" y="14"/>
+  <ButtonText>
+    <Anchors>
+      <Anchor point="CENTER">
+        <Offset>
+          <AbsDimension x="0" y="1"/>
+        </Offset>
+      </Anchor>
+    </Anchors>
+  </ButtonText>
+  <NormalTexture file="Interface\DialogFrame\UI-DialogBox-Background" alphaMode="ADD"/>
+  <PushedTexture file="Interface\DialogFrame\UI-DialogBox-Background" alphaMode="ADD"/>
+  <NormalFont style="GameFontNormal"/>
+  <HighlightFont style="GameFontHighlight"/>
+  <DisableFont style="GameFontDisable"/>
+  <Scripts>
+    <OnClick>SmartBagESIRemoveItem(self)</OnClick>
+    <OnReceiveDrag>SmartBagExtraSellItemWindow_OnReceiveDrag();</OnReceiveDrag>
+  </Scripts>
+</Button>
 
 
 <Frame name="SmartBagExtraSellItemWindow" parent="UIParent" hidden="true" movable="true">
@@ -253,148 +250,38 @@
     <OnReceiveDrag>SmartBagExtraSellItemWindow_OnReceiveDrag();</OnReceiveDrag>
   </Scripts>
   <Frames>
-    <Frame name="SmartBagEntryFrame1" inherits="SmartBagEntryTemplate">
-      <Anchors>
-        <Anchor point="TOPLEFT">
-          <Offset>
-            <AbsDimension x="20" y="-15"/>
-          </Offset>
-        </Anchor>
-      </Anchors>
-      <Layers>
-        <Layer level="BACKROUND">
-          <FontString name="SmartBagEntry1" inherits="GameFontNormal" text="">
-            <Size>
-              <AbsDimension x="150" y="12"/>
-            </Size>
-            <Anchors>
-              <Anchor point="TOPLEFT">
-                <Offset>
-                  <AbsDimension x="" y=""/>
-                </Offset>
-              </Anchor>
-            </Anchors>
-          </FontString>
-        </Layer>
-      </Layers>
-    </Frame>
-    <Frame name="SmartBagEntryFrame2" inherits="SmartBagEntryTemplate">
-      <Anchors>
-        <Anchor point="TOPLEFT">
-          <Offset>
-            <AbsDimension x="20" y="-29"/>
-          </Offset>
-        </Anchor>
-      </Anchors>
-      <Layers>
-        <Layer level="BACKROUND">
-          <FontString name="SmartBagEntry2" inherits="GameFontNormal" text="">
-            <Size>
-              <AbsDimension x="150" y="12"/>
-            </Size>
-            <Anchors>
-              <Anchor point="TOPLEFT">
-                <Offset>
-                  <AbsDimension x="" y=""/>
-                </Offset>
-              </Anchor>
-            </Anchors>
-          </FontString>
-        </Layer>
-      </Layers>
-    </Frame>
-    <Frame name="SmartBagEntryFrame3" inherits="SmartBagEntryTemplate">
-      <Anchors>
-        <Anchor point="TOPLEFT">
-          <Offset>
-            <AbsDimension x="20" y="-46"/>
-          </Offset>
-        </Anchor>
-      </Anchors>
-      <Layers>
-        <Layer level="BACKROUND">
-          <FontString name="SmartBagEntry3" inherits="GameFontNormal" text="">
-            <Size>
-              <AbsDimension x="150" y="12"/>
-            </Size>
-            <Anchors>
-              <Anchor point="TOPLEFT">
-                <Offset>
-                  <AbsDimension x="" y=""/>
-                </Offset>
-              </Anchor>
-            </Anchors>
-          </FontString>
-        </Layer>
-      </Layers>
-    </Frame>
-    <Frame name="SmartBagEntryFrame4" inherits="SmartBagEntryTemplate">
-      <Anchors>
-        <Anchor point="TOPLEFT">
-          <Offset>
-            <AbsDimension x="20" y="-63"/>
-          </Offset>
-        </Anchor>
-      </Anchors>
-      <Layers>
-        <Layer level="BACKROUND">
-          <FontString name="SmartBagEntry4" inherits="GameFontNormal" text="">
-            <Size>
-              <AbsDimension x="150" y="12"/>
-            </Size>
-            <Anchors>
-              <Anchor point="TOPLEFT">
-                <Offset>
-                  <AbsDimension x="" y=""/>
-                </Offset>
-              </Anchor>
-            </Anchors>
-          </FontString>
-        </Layer>
-      </Layers>
-    </Frame>
-    <Frame name="SmartBagEntryFrame6" inherits="SmartBagEntryTemplate">
-      <Anchors>
-        <Anchor point="TOPLEFT">
-          <Offset>
-            <AbsDimension x="20" y="-80"/>
-          </Offset>
-        </Anchor>
-      </Anchors>
-      <Layers>
-        <Layer level="BACKROUND">
-          <FontString name="SmartBagEntry5" inherits="GameFontNormal" text="">
-            <Size>
-              <AbsDimension x="150" y="12"/>
-            </Size>
-            <Anchors>
-              <Anchor point="TOPLEFT">
-                <Offset>
-                  <AbsDimension x="" y=""/>
-                </Offset>
-              </Anchor>
-            </Anchors>
-          </FontString>
-        </Layer>
-      </Layers>
-    </Frame>
-  <Button inherits="UIPanelButtonTemplate" name="SmartBagEntry5" text="test!" parent="SmartBagExtraSellItemWindow">
-     <Size>
-  <AbsDimension x="150" y="14" />
-</Size>
-<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" >
- <BackgroundInsets>
-  <AbsInset left="11" right="12" top="12" bottom="11"/>    
-</BackgroundInsets>
-<Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
-</Backdrop>
-    <Scripts>
-      <OnClick>
-        print("MONKEY!");
-      </OnClick>
-    </Scripts>
-  </Button>
-<!--     <ScrollFrame name="SmartBagScrollBarESI" parent="SmartBagExtraSellItemWindowItemFrame" inherits="FauxScrollFrameTemplate" hidden="true">
+    <Button name="SmartBagESIButton1" inherits="SmartBagESIButtonTemplate">
+      <Anchors><Anchor point="TOP" y="-18"/></Anchors>
+    </Button>
+    <Button name="SmartBagESIButton2" inherits="SmartBagESIButtonTemplate">
+      <Anchors><Anchor point="TOP" y="-34"/></Anchors>
+    </Button>
+    <Button name="SmartBagESIButton3" inherits="SmartBagESIButtonTemplate">
+      <Anchors><Anchor point="TOP" y="-50"/></Anchors>
+    </Button>
+    <Button name="SmartBagESIButton4" inherits="SmartBagESIButtonTemplate">
+      <Anchors><Anchor point="TOP" y="-66"/></Anchors>
+    </Button>
+    <Button name="SmartBagESIButton5" inherits="SmartBagESIButtonTemplate">
+      <Anchors><Anchor point="TOP" y="-82"/></Anchors>
+    </Button>
+    <Button name="SmartBagESIButton6" inherits="SmartBagESIButtonTemplate">
+      <Anchors><Anchor point="TOP" y="-98"/></Anchors>
+    </Button>
+    <Button name="SmartBagESIButton7" inherits="SmartBagESIButtonTemplate">
+      <Anchors><Anchor point="TOP" y="-114"/></Anchors>
+    </Button>
+    <Button name="SmartBagESIButton8" inherits="SmartBagESIButtonTemplate">
+      <Anchors><Anchor point="TOP" y="-130"/></Anchors>
+    </Button>
+    <Button name="SmartBagESIButton9" inherits="SmartBagESIButtonTemplate">
+      <Anchors><Anchor point="TOP" y="-146"/></Anchors>
+    </Button>
+    <Button name="SmartBagESIButton10" inherits="SmartBagESIButtonTemplate">
+      <Anchors><Anchor point="TOP" y="-162"/></Anchors>
+    </Button>
+
+    <ScrollFrame name="SmartBagScrollBarESI" parent="SmartBagExtraSellItemWindowItemFrame" inherits="FauxScrollFrameTemplate" hidden="true">
       <Anchors>
         <Anchor point="TOPRIGHT">
           <Offset>
@@ -415,9 +302,10 @@
           SmartBagScrollBarESI_Update()
         </OnShow>
       </Scripts>
-    </ScrollFrame> -->
+    </ScrollFrame>
   </Frames>
 </Frame>
+
 <Button inherits="UIPanelButtonTemplate" text="Clear">
   <Size x="80" y="35"/>
   <Anchors><Anchor point="BOTTOM" x="80" y="15"/></Anchors>
@@ -426,32 +314,6 @@
     <OnClick>
       SmartBagESIClearListButton()
     </OnClick>
-  </Scripts>
-</Button>
-
-<Button name="SmartBagESIButtonTemplate" text="Monkey">
-  <Size x="80" y="35"/>
-  <Anchors><Anchor point="BOTTOM" x="80" y="50"/></Anchors>
-  <ButtonText>
-    <Anchors>
-      <Anchor point="CENTER">
-        <Offset>
-          <AbsDimension x="0" y="1"/>
-        </Offset>
-      </Anchor>
-    </Anchors>
-  </ButtonText>
-  <NormalTexture file="Interface\DialogFrame\UI-DialogBox-Background" alphaMode="ADD"/>
-  <PushedTexture file="Interface\DialogFrame\UI-DialogBox-Background" alphaMode="ADD"/>
-  <NormalFont style="GameFontNormal"/>
-  <HighlightFont style="GameFontHighlight"/>
-  <DisableFont style="GameFontDisable"/>
-  <Scripts>
-    <OnClick>
-      SmartBagESIClearListButton()
-    </OnClick>
-      <OnEnter> SmartBagExtraSellItemWindow_OnEnter(self) </OnEnter>
-  <OnLeave> SmartBagExtraSellItemWindow_OnLeave(self) </OnLeave>
   </Scripts>
 </Button>
 </Frames>
