@@ -27,12 +27,6 @@ function SmartBag_OnLoad()
   else
     SmartBagSettings["Alerts"] = true
   end
-
-MyModData = {}
-  for i=1,50 do
-    MyModData[i] = "Test "..math.random(100)
-  end
-  
 end
 
 function ExecuteSorting(quiet)
@@ -146,31 +140,68 @@ function ExtraSellItemButton_OnClick()
   SmartBagSettingsWindow:Hide()
   SmartBagExtraSellItemWindow:Show()
   SmartBagExtraSellItemWindowItemFrame:Show()
-  SmartBagScrollBarESI:Show()
+  -- SmartBagScrollBarESI:Show()
   SmartBagEntryFrame1:Show()
   SmartBagEntryFrame2:Show()
   SmartBagEntryFrame3:Show()
   SmartBagEntryFrame4:Show()
-  SmartBagEntryFrame5:Show()
+  -- SmartBagEntryFrame5:Show()
+
+  for line=1,5 do
+        _G["SmartBagEntry"..line]:SetText(SmartBagExtraSellItems[line])
+        _G["SmartBagEntry"..line]:Show()
+  end
 end
 
-function SmartBagExtraSellItemWindow_OnEnter()
-  print("MONKEY IN!")
+function SmartBagExtraSellItemWindow_OnEnter(self)
+print(self:GetName() .. " IN!")
 end
 
-function SmartBagExtraSellItemWindow_OnLeave()
-  print("MONKEY OUT!")
+function SmartBagExtraSellItemWindow_OnLeave(self)
+print(self:GetName() .. " OUT!")
+end
+
+
+function SmartBagEntry_EventHandler(self, event, ...)
+ if event == "RightClick" then
+  SmartBagESIEntry_OnRickClick()
+ end
+ SmartBagESIEntry_OnRickClick()
+
 end
 
 function  SmartBagExtraSellItemWindow_OnReceiveDrag()
-  print("AMG TEH DROP!")
   local cursorType, info1, info2  = GetCursorInfo()
+  local addItemConfirm = 0
   if cursorType == "item" then
     iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(info2)
-    print(info2)
-    SmartBagExtraSellItems[table.getn(SmartBagExtraSellItems) + 1] = iname
-    SmartBagScrollBarESI_Update()
+    for i,line in ipairs(SmartBagExtraSellItems) do
+        if iname == SmartBagExtraSellItems[i] then
+         print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00Item already in list - " .. iname)
+         addItemConfirm = 1
+         ClearCursor()
+        end
+    end
+    if addItemConfirm == 0 then
+      SmartBagExtraSellItems[table.getn(SmartBagExtraSellItems) + 1] = iname
+      -- SmartBagScrollBarESI_Update()
+      print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00Item added to list - " .. iname)
+      ClearCursor()
+    end
   end
+end
+
+function SmartBagESIClearListButton()
+  SmartBagExtraSellItems = {}
+  SmartBagExtraSellItems[1] = "Scroll of Intellect II"
+  SmartBagExtraSellItems[2] = "Scroll of Stamina II"
+  SmartBagExtraSellItems[3] = "Callous Axe"
+  SmartBagScrollBarESI_Update()
+end
+
+function SmartBagESIEntry_OnRickClick(self)
+print("RIGHT CLICKY!")
+print(self)
 end
 
 
@@ -198,7 +229,7 @@ function SortContainerItem(search,targetbag)
       end
     end
   end
-  ResetCursor()
+  ClearCursor()
 end
 
 function SortEquipmentSet(targetbag)
@@ -246,7 +277,7 @@ function SortEquipmentSet(targetbag)
       print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Target: " .. KeepEquipmentButton:GetText() )
     end
   end
-  ResetCursor()
+  ClearCursor()
 end
 
 function SortRarity(targetrarity,targetbag)
@@ -269,7 +300,7 @@ function SortRarity(targetrarity,targetbag)
   if SmartBagSettings["Alerts"] == true then
   print("|cFF0066FF<SmartBag> |rGreen Items Sorted To: |cFFFFFF00" .. GreenSortButton:GetText())
   end
-  ResetCursor()
+  ClearCursor()
 end
 
 function SellGrey()
@@ -304,7 +335,7 @@ function SellGrey()
     print("|cFF0066FF<SmartBag> |rTotal Items Sold: |cFFFFFF00" .. x )
     print("|cFF0066FF<SmartBag> |rTotal Sale Price: |cFFFFFF00" .. ConvertToWoWMoney(totalsale) )
   end
-  ResetCursor()
+  ClearCursor()
 end
 
 -- *********************************************
