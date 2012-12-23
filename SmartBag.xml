@@ -10,36 +10,36 @@
       self:RegisterEvent("MERCHANT_SHOW");
       self:RegisterEvent("ADDON_LOADED");
       self:RegisterEvent("PLAYER_REGEN_ENABLED");
-      self:RegisterEvent("LeftButton");
-  </OnLoad>
-  <OnEvent function="SmartBag_EventHandler"/>
-</Scripts>
+<!--       self:RegisterEvent("LeftButton"); -->
+    </OnLoad>
+    <OnEvent function="SmartBag_EventHandler"/>
+  </Scripts>
 </Frame>
 <Frame name="SmartBagSettingsWindow" parent="UIParent" hidden="true" movable="true">
   <Size>
     <AbsDimension x="400" y="400" />
-</Size>
-<Anchors>
+  </Size>
+  <Anchors>
     <Anchor point="CENTER" />
-</Anchors>
-<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+  </Anchors>
+  <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
    <BackgroundInsets>
     <AbsInset left="11" right="12" top="12" bottom="11"/>
-</BackgroundInsets>
-<TileSize>
+  </BackgroundInsets>
+  <TileSize>
     <AbsValue val="32"/>
-</TileSize>
-<EdgeSize>
+  </TileSize>
+  <EdgeSize>
     <AbsValue val="32"/>
-</EdgeSize>
+  </EdgeSize>
 </Backdrop>
 <Scripts>
   <OnLoad>
     self:RegisterForDrag("LeftButton");
     tinsert(UISpecialFrames, self:GetName());
-</OnLoad>
-<OnDragStart>self:StartMoving();</OnDragStart>
-<OnDragStop>self:StopMovingOrSizing();</OnDragStop>
+  </OnLoad>
+  <OnDragStart>self:StartMoving();</OnDragStart>
+  <OnDragStop>self:StopMovingOrSizing();</OnDragStop>
 </Scripts>
 <Frames>
   <Button inherits="UIPanelButtonTemplate" name="SellGreyButton">
@@ -49,145 +49,149 @@
     <Scripts>
       <OnClick>
         SellGreyButton_OnClick();
-    </OnClick>
-</Scripts>
-</Button>
-<Button inherits="UIPanelButtonTemplate" name="KeepEquipmentButton">
+      </OnClick>
+    </Scripts>
+  </Button>
+  <Button inherits="UIPanelButtonTemplate" name="KeepEquipmentButton">
     <Size x="80" y="35"/>
     <Anchors><Anchor point="TOP" x="130" y="-75"/></Anchors>
     <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
     <Scripts>
       <OnClick>
         KeepEquipmentButton_OnClick();
-    </OnClick>
-</Scripts>
-</Button>
-<Button inherits="UIPanelButtonTemplate" name="GreenSortButton">
+      </OnClick>
+    </Scripts>
+  </Button>
+  <Button inherits="UIPanelButtonTemplate" name="GreenSortButton">
     <Size x="80" y="35"/>
     <Anchors><Anchor point="TOP" x="130" y="-120"/></Anchors>
     <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
     <Scripts>
       <OnClick>
         GreenSortButton_OnClick();
-    </OnClick>
-</Scripts>
-</Button>
-<Button inherits="UIPanelButtonTemplate" name="AlertTextButton">
+      </OnClick>
+    </Scripts>
+  </Button>
+  <Button inherits="UIPanelButtonTemplate" name="AlertTextButton">
     <Size x="80" y="35"/>
     <Anchors><Anchor point="TOP" x="130" y="-160"/></Anchors>
     <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
     <Scripts>
       <OnClick>
         AlertTextButton_OnClick();
-    </OnClick>
-</Scripts>
-</Button>
-<Button inherits="UIPanelButtonTemplate" name="ExtraSellItemButton" text="Extra">
+      </OnClick>
+    </Scripts>
+  </Button>
+  <Button inherits="UIPanelButtonTemplate" name="ExtraSellItemButton" text="Extra">
     <Size x="80" y="35"/>
     <Anchors><Anchor point="TOP" x="130" y="-200"/></Anchors>
     <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
     <Scripts>
       <OnClick>
         ExtraSellItemButton_OnClick();
-    </OnClick>
-</Scripts>
-</Button>
-<Button inherits="UIPanelButtonTemplate" text="OK">
+      </OnClick>
+    </Scripts>
+  </Button>
+  <Button inherits="UIPanelButtonTemplate" text="OK">
     <Size x="80" y="35"/>
     <Anchors><Anchor point="BOTTOM" y="15"/></Anchors>
     <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
     <Scripts>
       <OnClick>
         OkButton_OnClick();
-    </OnClick>
-</Scripts>
-</Button>
+      </OnClick>
+    </Scripts>
+  </Button>
 </Frames>
 <Layers>
   <Layer level="BACKROUND">
     <FontString name="SmartBagTitle" text="SmartBag v2.0" inherits="GameFontNormal">
       <Size>
         <AbsDimension x="150" y="12"/>
-    </Size>
-    <Anchors>
+      </Size>
+      <Anchors>
         <Anchor point="TOP">
           <Offset>
             <AbsDimension x="" y="-20"/>
-        </Offset>
-    </Anchor>
-</Anchors>
-</FontString>
-<FontString name="AutoSellGreyText" text="Auto Sell Grey Items:" inherits="GameFontNormal">
-  <Size>
-    <AbsDimension x="150" y="12"/>
-</Size>
-<Anchors>
-    <Anchor point="TOP">
-      <Offset>
-        <AbsDimension x="-105" y="-45"/>
-    </Offset>
-</Anchor>
-</Anchors>
-</FontString>
-<FontString name="EquipmentSortText" text="Auto Sort Equipment:" inherits="GameFontNormal">
-  <Size>
-    <AbsDimension x="150" y="12"/>
-</Size>
-<Anchors>
-    <Anchor point="TOP">
-      <Offset>
-        <AbsDimension x="-105" y="-90"/>
-    </Offset>
-</Anchor>
-</Anchors>
-</FontString>
-<FontString name="GreenSort" text="Extra Green Sorting:" inherits="GameFontNormal">
-  <Size>
-    <AbsDimension x="150" y="12"/>
-</Size>
-<Anchors>
-    <Anchor point="TOP">
-      <Offset>
-        <AbsDimension x="-105" y="-130"/>
-    </Offset>
-</Anchor>
-</Anchors>
-</FontString>
-<FontString name="AlertText" text="Sorting Messages:" inherits="GameFontNormal">
-  <Size>
-    <AbsDimension x="150" y="12"/>
-</Size>
-<Anchors>
-    <Anchor point="TOP">
-      <Offset>
-        <AbsDimension x="-105" y="-170"/>
-    </Offset>
-</Anchor>
-</Anchors>
-</FontString>
-</Layer>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+    <FontString name="AutoSellGreyText" text="Auto Sell Grey Items:" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="-105" y="-45"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+    <FontString name="EquipmentSortText" text="Auto Sort Equipment:" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="-105" y="-90"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+    <FontString name="GreenSort" text="Extra Green Sorting:" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="-105" y="-130"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+    <FontString name="AlertText" text="Sorting Messages:" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="-105" y="-170"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+  </Layer>
 </Layers>
 </Frame>
 
 <!-- ******************************** Templates ******************************** -->
 <!-- ******************************** Templates ******************************** -->
 
-<Frame name="SmartBagEntryTemplate" parent="UIParent" hidden="true" virtual="true">
-   <Size>
-      <AbsDimension x="150" y="14" />
-  </Size>
-  <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" >
-   <BackgroundInsets>
-      <AbsInset left="11" right="12" top="12" bottom="11"/>    
-  </BackgroundInsets>
+<Frame name="SmartBagEntryTemplate" parent="SmartBagExtraSellItemWindowItemFrame" hidden="true" virtual="true">
+ <Size>
+  <AbsDimension x="150" y="14" />
+</Size>
+<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" >
+ <BackgroundInsets>
+  <AbsInset left="11" right="12" top="12" bottom="11"/>    
+</BackgroundInsets>
 </Backdrop>
 <Scripts>
   <OnLoad>
-    self:RegisterForDrag("LeftButton"); 
     tinsert(UISpecialFrames, self:GetName());
-</OnLoad>
-<OnEnter> SmartBagExtraSellItemWindow_OnEnter() </OnEnter>
-<OnLeave> SmartBagExtraSellItemWindow_OnLeave() </OnLeave>
+    self:RegisterEvent("LeftButton");
+  </OnLoad>
+<!--   <OnClick> SmartBagExtraSellItemWindow_OnEnter(self) </OnClick> -->
+  <OnEnter> SmartBagExtraSellItemWindow_OnEnter(self) </OnEnter>
+  <OnLeave> SmartBagExtraSellItemWindow_OnLeave(self) </OnLeave>
+<!--   <OnEvent function="SmartBagEntry_EventHandler"/> -->
+  <OnEvent> print("Hello World! Hello " .. event); </OnEvent>
+  <OnReceiveDrag>SmartBagExtraSellItemWindow_OnReceiveDrag()</OnReceiveDrag>
 </Scripts>
 </Frame>
 
@@ -197,231 +201,275 @@
 <Frame name="SmartBagExtraSellItemWindow" parent="UIParent" hidden="true" movable="true">
   <Size>
     <AbsDimension x="400" y="400" />
-</Size>
-<Anchors>
+  </Size>
+  <Anchors>
     <Anchor point="CENTER" />
-</Anchors>
-<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+  </Anchors>
+  <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
    <BackgroundInsets>
     <AbsInset left="11" right="12" top="12" bottom="11"/>
-</BackgroundInsets>
-<TileSize>
+  </BackgroundInsets>
+  <TileSize>
     <AbsValue val="32"/>
-</TileSize>
-<EdgeSize>
+  </TileSize>
+  <EdgeSize>
     <AbsValue val="32"/>
-</EdgeSize>
+  </EdgeSize>
 </Backdrop>
 <Scripts>
   <OnLoad>
     self:RegisterForDrag("LeftButton"); 
     tinsert(UISpecialFrames, self:GetName());
-</OnLoad>
-<OnDragStart>self:StartMoving();</OnDragStart>
-<OnDragStop>self:StopMovingOrSizing();</OnDragStop>
-  <OnReceiveDrag>
-    SmartBagExtraSellItemWindow_OnReceiveDrag();
-  </OnReceiveDrag>
+  </OnLoad>
+  <OnDragStart>self:StartMoving();</OnDragStart>
+  <OnDragStop>self:StopMovingOrSizing();</OnDragStop>
 </Scripts>
 <Frames>
-  <Frame name="SmartBagExtraSellItemWindowItemFrame" parent="SmartBagExtraSellItemWindow" hidden="true" movable="true">
+  <Frame name="SmartBagExtraSellItemWindowItemFrame" parent="SmartBagExtraSellItemWindow">
     <Size>
       <AbsDimension x="190" y="340" />
-  </Size>
-  <Anchors>
+    </Size>
+    <Anchors>
       <Anchor point="TOPLEFT">
         <Offset>
-            <AbsDimension x="18" y="-40"/>
+          <AbsDimension x="18" y="-40"/>
         </Offset>
-    </Anchor>
-  </Anchors>
-  <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+      </Anchor>
+    </Anchors>
+    <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
      <BackgroundInsets>
       <AbsInset left="11" right="12" top="12" bottom="11"/>    
-  </BackgroundInsets>
-  <TileSize>
+    </BackgroundInsets>
+    <TileSize>
       <AbsValue val="32"/>
-  </TileSize>
-  <EdgeSize>
+    </TileSize>
+    <EdgeSize>
       <AbsValue val="32"/>
-  </EdgeSize>
-</Backdrop>
-<Scripts>
-    <OnLoad>
-      self:RegisterForDrag("LeftButton"); 
-      tinsert(UISpecialFrames, self:GetName());
-  </OnLoad>
-  <OnReceiveDrag>
-    SmartBagExtraSellItemWindow_OnReceiveDrag();
-  </OnReceiveDrag>
-</Scripts>
-<Frames>
-
-<Frame name="SmartBagEntryFrame1" parent="SmartBagExtraSellItemWindowItemFrame" hidden="true" inherits="SmartBagEntryTemplate">
+    </EdgeSize>
+  </Backdrop>
+  <Scripts>
+    <OnEnter> </OnEnter>
+    <OnLeave> </OnLeave>
+    <OnReceiveDrag>SmartBagExtraSellItemWindow_OnReceiveDrag();</OnReceiveDrag>
+  </Scripts>
+  <Frames>
+    <Frame name="SmartBagEntryFrame1" inherits="SmartBagEntryTemplate">
       <Anchors>
         <Anchor point="TOPLEFT">
           <Offset>
             <AbsDimension x="20" y="-15"/>
-        </Offset>
-    </Anchor>
-</Anchors>
-<Layers>
-    <Layer level="BACKROUND">
-      <FontString name="SmartBagEntry1" inherits="GameFontNormal" text="">
-        <Size>
-          <AbsDimension x="150" y="12"/>
-      </Size>
-      <Anchors>
-          <Anchor point="TOPLEFT">
-            <Offset>
-              <AbsDimension x="" y=""/>
           </Offset>
-      </Anchor>
-  </Anchors>
-</FontString>
-</Layer>
-</Layers>
-</Frame>
-<Frame name="SmartBagEntryFrame2" parent="SmartBagExtraSellItemWindowItemFrame" hidden="true" inherits="SmartBagEntryTemplate">
+        </Anchor>
+      </Anchors>
+      <Layers>
+        <Layer level="BACKROUND">
+          <FontString name="SmartBagEntry1" inherits="GameFontNormal" text="">
+            <Size>
+              <AbsDimension x="150" y="12"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="" y=""/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+          </FontString>
+        </Layer>
+      </Layers>
+    </Frame>
+    <Frame name="SmartBagEntryFrame2" inherits="SmartBagEntryTemplate">
       <Anchors>
         <Anchor point="TOPLEFT">
           <Offset>
             <AbsDimension x="20" y="-29"/>
-        </Offset>
-    </Anchor>
-</Anchors>
-<Layers>
-    <Layer level="BACKROUND">
-      <FontString name="SmartBagEntry2" inherits="GameFontNormal" text="">
-        <Size>
-          <AbsDimension x="150" y="12"/>
-      </Size>
-      <Anchors>
-          <Anchor point="TOPLEFT">
-            <Offset>
-              <AbsDimension x="" y=""/>
           </Offset>
-      </Anchor>
-  </Anchors>
-</FontString>
-</Layer>
-</Layers>
-</Frame>
-<Frame name="SmartBagEntryFrame3" parent="SmartBagExtraSellItemWindowItemFrame" hidden="true" inherits="SmartBagEntryTemplate">
+        </Anchor>
+      </Anchors>
+      <Layers>
+        <Layer level="BACKROUND">
+          <FontString name="SmartBagEntry2" inherits="GameFontNormal" text="">
+            <Size>
+              <AbsDimension x="150" y="12"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="" y=""/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+          </FontString>
+        </Layer>
+      </Layers>
+    </Frame>
+    <Frame name="SmartBagEntryFrame3" inherits="SmartBagEntryTemplate">
       <Anchors>
         <Anchor point="TOPLEFT">
           <Offset>
             <AbsDimension x="20" y="-46"/>
-        </Offset>
-    </Anchor>
-</Anchors>
-<Layers>
-    <Layer level="BACKROUND">
-      <FontString name="SmartBagEntry3" inherits="GameFontNormal" text="">
-        <Size>
-          <AbsDimension x="150" y="12"/>
-      </Size>
-      <Anchors>
-          <Anchor point="TOPLEFT">
-            <Offset>
-              <AbsDimension x="" y=""/>
           </Offset>
-      </Anchor>
-  </Anchors>
-</FontString>
-</Layer>
-</Layers>
-</Frame>
-<Frame name="SmartBagEntryFrame4" parent="SmartBagExtraSellItemWindowItemFrame" hidden="true" inherits="SmartBagEntryTemplate">
+        </Anchor>
+      </Anchors>
+      <Layers>
+        <Layer level="BACKROUND">
+          <FontString name="SmartBagEntry3" inherits="GameFontNormal" text="">
+            <Size>
+              <AbsDimension x="150" y="12"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="" y=""/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+          </FontString>
+        </Layer>
+      </Layers>
+    </Frame>
+    <Frame name="SmartBagEntryFrame4" inherits="SmartBagEntryTemplate">
       <Anchors>
         <Anchor point="TOPLEFT">
           <Offset>
             <AbsDimension x="20" y="-63"/>
-        </Offset>
-    </Anchor>
-</Anchors>
-<Layers>
-    <Layer level="BACKROUND">
-      <FontString name="SmartBagEntry4" inherits="GameFontNormal" text="">
-        <Size>
-          <AbsDimension x="150" y="12"/>
-      </Size>
-      <Anchors>
-          <Anchor point="TOPLEFT">
-            <Offset>
-              <AbsDimension x="" y=""/>
           </Offset>
-      </Anchor>
-  </Anchors>
-</FontString>
-</Layer>
-</Layers>
-</Frame>
-<Frame name="SmartBagEntryFrame5" parent="SmartBagExtraSellItemWindowItemFrame" hidden="true" inherits="SmartBagEntryTemplate">
+        </Anchor>
+      </Anchors>
+      <Layers>
+        <Layer level="BACKROUND">
+          <FontString name="SmartBagEntry4" inherits="GameFontNormal" text="">
+            <Size>
+              <AbsDimension x="150" y="12"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="" y=""/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+          </FontString>
+        </Layer>
+      </Layers>
+    </Frame>
+    <Frame name="SmartBagEntryFrame6" inherits="SmartBagEntryTemplate">
       <Anchors>
         <Anchor point="TOPLEFT">
           <Offset>
             <AbsDimension x="20" y="-80"/>
-        </Offset>
-    </Anchor>
-</Anchors>
-<Layers>
-    <Layer level="BACKROUND">
-      <FontString name="SmartBagEntry5" inherits="GameFontNormal" text="">
-        <Size>
-          <AbsDimension x="150" y="12"/>
-      </Size>
-      <Anchors>
-          <Anchor point="TOPLEFT">
-            <Offset>
-              <AbsDimension x="" y=""/>
           </Offset>
-      </Anchor>
-  </Anchors>
-</FontString>
-</Layer>
-</Layers>
+        </Anchor>
+      </Anchors>
+      <Layers>
+        <Layer level="BACKROUND">
+          <FontString name="SmartBagEntry5" inherits="GameFontNormal" text="">
+            <Size>
+              <AbsDimension x="150" y="12"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="" y=""/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+          </FontString>
+        </Layer>
+      </Layers>
+    </Frame>
+  <Button inherits="UIPanelButtonTemplate" name="SmartBagEntry5" text="test!" parent="SmartBagExtraSellItemWindow">
+     <Size>
+  <AbsDimension x="150" y="14" />
+</Size>
+<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" >
+ <BackgroundInsets>
+  <AbsInset left="11" right="12" top="12" bottom="11"/>    
+</BackgroundInsets>
+<Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+</Backdrop>
+    <Scripts>
+      <OnClick>
+        print("MONKEY!");
+      </OnClick>
+    </Scripts>
+  </Button>
+<!--     <ScrollFrame name="SmartBagScrollBarESI" parent="SmartBagExtraSellItemWindowItemFrame" inherits="FauxScrollFrameTemplate" hidden="true">
+      <Anchors>
+        <Anchor point="TOPRIGHT">
+          <Offset>
+            <AbsDimension x="-20" y="-16"/>
+          </Offset>
+        </Anchor>
+        <Anchor point="BOTTOMLEFT">
+          <Offset>
+            <AbsDimension x="0" y="12"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+      <Scripts>
+        <OnVerticalScroll>
+          FauxScrollFrame_OnVerticalScroll(self, offset, 16, SmartBagScrollBarESI_Update);
+        </OnVerticalScroll>
+        <OnShow>
+          SmartBagScrollBarESI_Update()
+        </OnShow>
+      </Scripts>
+    </ScrollFrame> -->
+  </Frames>
 </Frame>
-<ScrollFrame name="SmartBagScrollBarESI" parent="SmartBagExtraSellItemWindowItemFrame" inherits="FauxScrollFrameTemplate" hidden="true">
+<Button inherits="UIPanelButtonTemplate" text="Clear">
+  <Size x="80" y="35"/>
+  <Anchors><Anchor point="BOTTOM" x="80" y="15"/></Anchors>
+  <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+  <Scripts>
+    <OnClick>
+      SmartBagESIClearListButton()
+    </OnClick>
+  </Scripts>
+</Button>
+
+<Button name="SmartBagESIButtonTemplate" text="Monkey">
+  <Size x="80" y="35"/>
+  <Anchors><Anchor point="BOTTOM" x="80" y="50"/></Anchors>
+  <ButtonText>
     <Anchors>
-      <Anchor point="TOPRIGHT">
+      <Anchor point="CENTER">
         <Offset>
-          <AbsDimension x="-20" y="-16"/>
-      </Offset>
-  </Anchor>
-  <Anchor point="BOTTOMLEFT">
-    <Offset>
-      <AbsDimension x="0" y="12"/>
-  </Offset>
-</Anchor>
-</Anchors>
-<Scripts>
-  <OnVerticalScroll>
-    FauxScrollFrame_OnVerticalScroll(self, offset, 16, SmartBagScrollBarESI_Update);
-</OnVerticalScroll>
-<OnShow>
-    SmartBagScrollBarESI_Update()
-</OnShow>
-</Scripts>
-</ScrollFrame>
-</Frames>
-</Frame>
+          <AbsDimension x="0" y="1"/>
+        </Offset>
+      </Anchor>
+    </Anchors>
+  </ButtonText>
+  <NormalTexture file="Interface\DialogFrame\UI-DialogBox-Background" alphaMode="ADD"/>
+  <PushedTexture file="Interface\DialogFrame\UI-DialogBox-Background" alphaMode="ADD"/>
+  <NormalFont style="GameFontNormal"/>
+  <HighlightFont style="GameFontHighlight"/>
+  <DisableFont style="GameFontDisable"/>
+  <Scripts>
+    <OnClick>
+      SmartBagESIClearListButton()
+    </OnClick>
+      <OnEnter> SmartBagExtraSellItemWindow_OnEnter(self) </OnEnter>
+  <OnLeave> SmartBagExtraSellItemWindow_OnLeave(self) </OnLeave>
+  </Scripts>
+</Button>
 </Frames>
 <Layers>
-    <Layer level="BACKROUND">
-        <FontString name="SmartBagTitle" text="SmartBag - Extra Sell Items" inherits="GameFontNormal">
+  <Layer level="BACKROUND">
+    <FontString name="SmartBagTitle" text="SmartBag - Extra Sell Items" inherits="GameFontNormal">
       <Size>
         <AbsDimension x="200" y="12"/>
-    </Size>
-    <Anchors>
+      </Size>
+      <Anchors>
         <Anchor point="TOP">
           <Offset>
             <AbsDimension x="" y="-20"/>
-        </Offset>
-    </Anchor>
-</Anchors>
-</FontString>
-</Layer>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+  </Layer>
 </Layers>
 </Frame>
 </Ui> 
