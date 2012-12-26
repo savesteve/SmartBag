@@ -18,9 +18,6 @@ function SmartBag_OnLoad()
   end
   if (not SmartBagExtraSellItems) then
   SmartBagExtraSellItems = {}
-  SmartBagExtraSellItems[1] = "Scroll of Intellect II"
-  SmartBagExtraSellItems[2] = "Scroll of Stamina II"
-  SmartBagExtraSellItems[3] = "Callous Axe"
   end
   
   if SmartBagSettings["Alerts"] == true or SmartBagSettings["Alerts"] == false then
@@ -88,7 +85,7 @@ function SmartBag_SlashCommand(msg)
 end
 
 -- *********************************************
--- UI Functions
+-- Settings Window Functions
 -- *********************************************
 
 function SellGreyButton_OnClick()
@@ -115,15 +112,24 @@ function OkButton_OnClick()
   SmartBagSettingsWindow:Hide()
 end
 
+function ExtraSellItemButton_OnClick()
+  SmartBagSettingsWindow:Hide()
+  SmartBagExtraSellItemWindow:Show()
+  SmartBagExtraSellItemWindowItemFrame:Show()
+  SmartBagESIClearCancelButton()
+end
+
+-- *********************************************
+-- Extra Sell Items Functions
+-- *********************************************
+
 function SmartBagScrollBarESI_Update()
   line = nil
   lineplusoffset = nil
-  FauxScrollFrame_Update(SmartBagScrollBarESI,50,5,16)
-  -- DEFAULT_CHAT_FRAME:AddMessage("We're at "..FauxScrollFrame_GetOffset(SmartBagScrollBar))
-  
-    if table.getn(SmartBagExtraSellItems) < 10 then
+  FauxScrollFrame_Update(SmartBagScrollBarESI,18,1,20)
+     if table.getn(SmartBagExtraSellItems) < 19 then
       SmartBagScrollBarESI:Hide()
-      for line=1,10 do
+      for line=1,19 do
         if line <= table.getn(SmartBagExtraSellItems) then
           _G["SmartBagESIButton"..line]:SetText(SmartBagExtraSellItems[line])
           _G["SmartBagESIButton"..line]:Show()
@@ -131,9 +137,8 @@ function SmartBagScrollBarESI_Update()
           _G["SmartBagESIButton"..line]:Hide()
         end
       end
-
     else
-      for line=1,10 do
+      for line=1,19 do
         lineplusoffset = line + FauxScrollFrame_GetOffset(SmartBagScrollBarESI)
         SmartBagScrollBarESI:Show()
         if lineplusoffset <= 50 then
@@ -150,13 +155,6 @@ function SmartBagScrollBarESI_Update()
     end
 end
 
-function ExtraSellItemButton_OnClick()
-  SmartBagSettingsWindow:Hide()
-  SmartBagExtraSellItemWindow:Show()
-  SmartBagExtraSellItemWindowItemFrame:Show()
-  SmartBagScrollBarESI:Show()
-end
-
 function  SmartBagExtraSellItemWindow_OnReceiveDrag()
   local cursorType, info1, info2  = GetCursorInfo()
   local addItemConfirm = 0
@@ -164,41 +162,65 @@ function  SmartBagExtraSellItemWindow_OnReceiveDrag()
     iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(info2)
     for i,line in ipairs(SmartBagExtraSellItems) do
         if iname == SmartBagExtraSellItems[i] then
-         print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00Item already in list - " .. iname)
+         print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00Item already in list - |r" .. iname)
          addItemConfirm = 1
          ClearCursor()
         end
     end
     if addItemConfirm == 0 then
-      SmartBagExtraSellItems[table.getn(SmartBagExtraSellItems) + 1] = iname
-      SmartBagScrollBarESI_Update()
-      print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00Item added to list - " .. iname)
-      ClearCursor()
+      if ivendorPrice > 0 then
+        SmartBagExtraSellItems[table.getn(SmartBagExtraSellItems) + 1] = iname
+        SmartBagScrollBarESI_Update()
+        print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFF66FF33Item Added To List - |r" .. iname)
+        ClearCursor()
+      else
+        print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00Unable To Add Item - No Vendor Price - |r" .. iname)
+        ClearCursor()
+      end
     end
   end
 end
 
+function SmartBagESIClearButton()
+  SmartBagExtraSellItemWindow:Hide()
+  SmartBagExtraSellItemWindowItemFrame:Hide()
+  SmartBagESIClearWindow:Show()
+end
+
+function SmartBagESIClearCancelButton()
+  SmartBagESIClearWindow:Hide()
+  SmartBagExtraSellItemWindow:Show()
+  SmartBagExtraSellItemWindowItemFrame:Show()
+  SmartBagScrollBarESI_Update()
+end
+
 function SmartBagESIClearListButton()
   SmartBagExtraSellItems = {}
-  SmartBagExtraSellItems[1] = "Scroll of Intellect II"
-  SmartBagExtraSellItems[2] = "Scroll of Stamina II"
-  SmartBagExtraSellItems[3] = "Callous Axe"
+  -- SmartBagExtraSellItems[1] = "Scroll of Intellect II"
+  -- SmartBagExtraSellItems[2] = "Scroll of Stamina II"
+  -- SmartBagExtraSellItems[3] = "Callous Axe"
+  print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFF0000LIST CLEARED")
+  SmartBagESIClearWindow:Hide()
+  SmartBagExtraSellItemWindow:Show()
+  SmartBagExtraSellItemWindowItemFrame:Show()
   SmartBagScrollBarESI_Update()
-  print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00LIST CLEARED")
 end
 
 
 function SmartBagESIRemoveItem(self)
-
-local target = self:GetText()
-
-for i,line in ipairs(SmartBagExtraSellItems) do
-        if target == SmartBagExtraSellItems[i] then
-          table.remove(SmartBagExtraSellItems, i)
-          print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00Item removed from list - " .. target)
-          SmartBagScrollBarESI_Update()
-        end
+  local cursorType, info1, info2  = GetCursorInfo()
+  if cursorType == "item" then
+    SmartBagExtraSellItemWindow_OnReceiveDrag()
+  else
+    local target = self:GetText()
+    for i,line in ipairs(SmartBagExtraSellItems) do
+      if target == SmartBagExtraSellItems[i] then
+        table.remove(SmartBagExtraSellItems, i)
+        print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFF0000Item Removed From List - |r" .. target)
+        SmartBagScrollBarESI_Update()
+      end
     end
+  end
 end
 
 -- *********************************************
@@ -267,9 +289,9 @@ function SortEquipmentSet(targetbag)
   end
   else
     if SmartBagSettings["Alerts"] == true then
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Not enough free space.")
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Required space: " .. x )
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Available space: " .. numberOfFreeSlots)
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Not Enough Free Space.")
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Required Space: " .. x )
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Available Space: " .. numberOfFreeSlots)
       print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Target: " .. KeepEquipmentButton:GetText() )
     end
   end
@@ -387,15 +409,7 @@ function ConvertToWoWMoney(number)
   elseif number then
     wowmoney = number .. " copper"
   end
-
   return wowmoney
-
-end
- 
-function OptomizeArray(sourcearray)
-  optArray = {}
-  -- for 1,table.getn(sourcearray)
-  -- end
 end
 
 function removeDecimal(number)
