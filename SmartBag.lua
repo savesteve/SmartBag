@@ -196,9 +196,6 @@ end
 
 function SmartBagESIClearListButton()
   SmartBagExtraSellItems = {}
-  -- SmartBagExtraSellItems[1] = "Scroll of Intellect II"
-  -- SmartBagExtraSellItems[2] = "Scroll of Stamina II"
-  -- SmartBagExtraSellItems[3] = "Callous Axe"
   print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFF0000LIST CLEARED")
   SmartBagESIClearWindow:Hide()
   SmartBagExtraSellItemWindow:Show()
@@ -221,6 +218,38 @@ function SmartBagESIRemoveItem(self)
       end
     end
   end
+end
+
+function SmartBagESIAddButton()
+  SmartBagExtraSellItemWindow:Hide()
+  SmartBagESIAddWindow:Show()
+end
+
+function SmartBagESIAddAddButton()
+  -- print(SmartBagESIAddWindowEditBox:GetText())
+  local addItemConfirm = 0
+  for i,line in ipairs(SmartBagExtraSellItems) do
+    if SmartBagESIAddWindowEditBox:GetText() == SmartBagExtraSellItems[i] then
+     print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFFFFFF00Item already in list - |r" .. SmartBagESIAddWindowEditBox:GetText())
+     addItemConfirm = 1
+     ClearCursor()
+    end
+  end
+  if addItemConfirm == 0 then
+    SmartBagExtraSellItems[table.getn(SmartBagExtraSellItems) + 1] = SmartBagESIAddWindowEditBox:GetText()
+    print("|cFF0066FF<SmartBag> |rExtra Sell Items: |cFF66FF33Item Added To List - |r" .. SmartBagESIAddWindowEditBox:GetText())
+    SmartBagESIAddWindow:Hide()
+    SmartBagExtraSellItemWindow:Show()
+    SmartBagExtraSellItemWindowItemFrame:Show()
+    SmartBagScrollBarESI_Update()
+  end
+end
+
+function SmartBagESIAddCancelButton()
+  SmartBagESIAddWindow:Hide()
+  SmartBagExtraSellItemWindow:Show()
+  SmartBagExtraSellItemWindowItemFrame:Show()
+  SmartBagScrollBarESI_Update()
 end
 
 -- *********************************************

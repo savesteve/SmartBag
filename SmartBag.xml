@@ -175,6 +175,7 @@
 <Button name="SmartBagESIButtonTemplate" hidden="true" virtual="true">
   <Size x="150" y="14"/>
   <ButtonText>
+    <Size x="150" y="14"/>
     <Anchors>
       <Anchor point="CENTER">
         <Offset>
@@ -246,6 +247,9 @@
     </EdgeSize>
   </Backdrop>
   <Scripts>
+    <OnLoad>
+      self:RegisterForDrag("LeftButton"); 
+    </OnLoad>
     <OnReceiveDrag>SmartBagExtraSellItemWindow_OnReceiveDrag();</OnReceiveDrag>
   </Scripts>
   <Frames>
@@ -336,13 +340,13 @@
   <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
   <Scripts>
     <OnClick>
-      SmartBagESIAddWindow:Show();
+      SmartBagESIAddButton();
     </OnClick>
   </Scripts>
 </Button>
-<Button name="SmartBagESIClearButton" inherits="UIPanelButtonTemplate" text="Clear">
-  <Size x="80" y="35"/>
-  <Anchors><Anchor point="BOTTOM" x="80" y="15"/></Anchors>
+<Button name="SmartBagESIClearButton" inherits="UIPanelButtonTemplate" text="Clear List">
+  <Size x="100" y="35"/>
+  <Anchors><Anchor point="TOP" x="100" y="-90"/></Anchors>
   <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
   <Scripts>
     <OnClick>
@@ -368,10 +372,9 @@
   </Layer>
 </Layers>
 </Frame>
-
 <Frame name="SmartBagESIAddWindow" movable="true">
   <Size>
-    <AbsDimension x="400" y="200" />
+    <AbsDimension x="400" y="150" />
   </Size>
   <Anchors>
     <Anchor point="CENTER" />
@@ -386,17 +389,87 @@
   <EdgeSize>
     <AbsValue val="32"/>
   </EdgeSize>
-</Backdrop>
-<Scripts>
-  <OnLoad>
-    self:RegisterForDrag("LeftButton");
-    tinsert(UISpecialFrames, self:GetName());
-  </OnLoad>
-  <OnDragStart>self:StartMoving();</OnDragStart>
-  <OnDragStop>self:StopMovingOrSizing();</OnDragStop>
-</Scripts>
+  </Backdrop>
+  <Scripts>
+    <OnLoad>
+      self:RegisterForDrag("LeftButton");
+      tinsert(UISpecialFrames, self:GetName());
+    </OnLoad>
+    <OnDragStart>self:StartMoving();</OnDragStart>
+    <OnDragStop>self:StopMovingOrSizing();</OnDragStop>
+  </Scripts>
+  <Frames>
+    <EditBox name="SmartBagESIAddWindowEditBox" letters="40" autoFocus="false">
+      <Size x="300" y="25" />
+      <Anchors>
+          <Anchor point="TOP">
+              <Offset x="" y="-60" />
+          </Anchor>
+      </Anchors>
+      <TextInsets>
+        <AbsInset left="10" right="5" top="0" bottom="0"/>
+      </TextInsets>
+      <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+        <EdgeSize>
+          <AbsValue val="15"/>
+        </EdgeSize>
+      </Backdrop>
+      <Scripts>
+          <OnLoad>
+          </OnLoad>
+      </Scripts>
+      <FontString inherits="ChatFontNormal" />
+    </EditBox>
+    <Button name="SmartBagESIAddAddButton" inherits="UIPanelButtonTemplate" text="Add">
+      <Size x="80" y="35"/>
+      <Anchors><Anchor point="BOTTOM" x="-50" y="15"/></Anchors>
+      <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+      <Scripts>
+        <OnClick>
+          SmartBagESIAddAddButton()
+        </OnClick>
+      </Scripts>
+    </Button>
+    <Button name="SmartBagESIAddCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
+      <Size x="80" y="35"/>
+      <Anchors><Anchor point="BOTTOM" x="50" y="15"/></Anchors>
+      <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+      <Scripts>
+        <OnClick>
+          SmartBagESIAddCancelButton()
+        </OnClick>
+      </Scripts>
+    </Button>
+  </Frames>
+  <Layers>
+    <Layer level="BACKROUND">
+      <FontString name="SmartBagTitle" text="SmartBag - Extra Sell Items" inherits="GameFontNormal">
+        <Size>
+          <AbsDimension x="200" y="12"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOP">
+            <Offset>
+              <AbsDimension x="" y="-20"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </FontString>
+      <FontString name="" text="Type the name of the item you want to add:" inherits="GameFontNormal">
+        <Size>
+          <AbsDimension x="350" y="12"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOP">
+            <Offset>
+              <AbsDimension x="" y="-45"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </FontString>
+    </Layer>
+  </Layers>
 </Frame>
-
 <Frame name="SmartBagESIClearWindow" movable="true">
   <Size>
     <AbsDimension x="400" y="150" />
@@ -426,7 +499,7 @@
   <Frames>
     <Button name="SmartBagESIClearButton" inherits="UIPanelButtonTemplate" text="YES">
       <Size x="80" y="35"/>
-      <Anchors><Anchor point="BOTTOM" x="-50" y="15"/></Anchors>
+      <Anchors><Anchor point="BOTTOM" x="-50" y="30"/></Anchors>
       <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
       <Scripts>
         <OnClick>
@@ -436,7 +509,7 @@
     </Button>
     <Button name="SmartBagESIClearCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
       <Size x="80" y="35"/>
-      <Anchors><Anchor point="BOTTOM" x="50" y="15"/></Anchors>
+      <Anchors><Anchor point="BOTTOM" x="50" y="30"/></Anchors>
       <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
       <Scripts>
         <OnClick>
@@ -447,7 +520,7 @@
   </Frames>
   <Layers>
     <Layer level="BACKROUND">
-      <FontString name="SmartBagTitle" text="SmartBag - Extra Sell Items" inherits="GameFontNormal">
+      <FontString name="SmartBagTitleClearWindow" text="SmartBag - Extra Sell Items" inherits="GameFontNormal">
         <Size>
           <AbsDimension x="200" y="12"/>
         </Size>
@@ -459,14 +532,14 @@
           </Anchor>
         </Anchors>
       </FontString>
-      <FontString name="SmartBagTitle" text="Are you sure you want to clear the Extra Sell Item list?" inherits="GameFontNormal">
+      <FontString name="ClearMessage" text="Are you sure you want to clear the Extra Sell Item list?" inherits="GameFontNormal">
         <Size>
           <AbsDimension x="350" y="12"/>
         </Size>
         <Anchors>
           <Anchor point="TOP">
             <Offset>
-              <AbsDimension x="" y="-60"/>
+              <AbsDimension x="" y="-55"/>
             </Offset>
           </Anchor>
         </Anchors>
