@@ -225,6 +225,11 @@ function SmartBagESIAddButton()
   SmartBagESIAddWindow:Show()
 end
 
+function SmartBagESIOKButton()
+  SmartBagExtraSellItemWindow:Hide()
+  SmartBagSettingsWindow:Show()
+end
+
 function SmartBagESIAddAddButton()
   -- print(SmartBagESIAddWindowEditBox:GetText())
   local addItemConfirm = 0
