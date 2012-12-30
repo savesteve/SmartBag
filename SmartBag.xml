@@ -251,6 +251,8 @@
       self:RegisterForDrag("LeftButton"); 
     </OnLoad>
     <OnReceiveDrag>SmartBagExtraSellItemWindow_OnReceiveDrag();</OnReceiveDrag>
+<!--     <OnEnter> SmartBagESISetTooltip() </OnEnter> -->
+    <!-- <OnLeave> MyFrame_OnLeave() </OnLeave> -->
   </Scripts>
   <Frames>
     <Button name="SmartBagESIButton1" inherits="SmartBagESIButtonTemplate">

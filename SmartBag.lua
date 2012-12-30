@@ -27,22 +27,32 @@ function SmartBag_OnLoad()
 end
 
 function ExecuteSorting(quiet)
+
+
   if quiet == true then 
     xquiet = SmartBagSettings["Alerts"]
     SmartBagSettings["Alerts"]=false
   end
   
-  SortEquipmentSet(SmartBagSettings["GearSetBag"])
-  SortRarity(2,SmartBagSettings["GreenSort"])
+  if SmartBagSettings["GearSetBag"] ~= "0" then
+    SortEquipmentSet(SmartBagSettings["GearSetBag"])
+  end
   
+  if SmartBagSettings["GreenSort"] ~= "0" then
+    SortRarity(2,SmartBagSettings["GreenSort"])
+  end
+
+  if SmartBagSettings["SellGrey"] == false then
+    SmartBagESIExecute()
+  else
+    SellGrey()
+  end
+
   if quiet == true then SmartBagSettings["Alerts"] = xquiet end
 end
 
 function SmartBag_EventHandler(self, event, ...)
- if event == "MERCHANT_SHOW" then 
-  if  SmartBagSettings["AutoSellGrey"] == true then 
-    SellGrey()
-  end
+ if event == "MERCHANT_SHOW" then
   ExecuteSorting()
  end
 
@@ -257,6 +267,37 @@ function SmartBagESIAddCancelButton()
   SmartBagScrollBarESI_Update()
 end
 
+function SmartBagESIExecute()
+  x = 0
+  totalsale = 0
+  for bag = 0,4 do
+    for slot = 1,GetContainerNumSlots(bag) do
+      local item = GetContainerItemLink(bag,slot)
+      if item then 
+       iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(item)
+      end
+      for i,line in ipairs(SmartBagExtraSellItems) do
+        if iname == SmartBagExtraSellItems[i] then
+         PickupContainerItem(bag,slot)
+         PickupMerchantItem(0)
+         itemcount = tonumber(GetItemCount(ilink))
+         totalsale = totalsale + (itemcount * tonumber(ivendorPrice))
+         x = x + itemcount
+        end
+      end
+      iname = nil
+    end
+  end
+  if x > 0 and SmartBagSettings["Alerts"] == true then
+    print("|cFF0066FF<SmartBag> |rTotal Items Sold: |cFF66FF33" .. x )
+    print("|cFF0066FF<SmartBag> |rTotal Sale Price: |cFF66FF33" .. ConvertToWoWMoney(totalsale) )
+  end
+  ClearCursor()
+end
+
+function SmartBagESISetTooltip()
+end
+
 -- *********************************************
 -- Sorting Functions
 -- *********************************************
@@ -319,7 +360,7 @@ function SortEquipmentSet(targetbag)
     end
   end
   if SmartBagSettings["Alerts"] == true then
-    print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFFFFFF00" .. KeepEquipmentButton:GetText() )
+    print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText() )
   end
   else
     if SmartBagSettings["Alerts"] == true then
@@ -338,7 +379,7 @@ function SortRarity(targetrarity,targetbag)
       local item = GetContainerItemLink(bag,slot)
       if item then
         iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(item)
-        if iRarity == targetrarity and IsSetItem(iname) == false then
+        if iRarity == targetrarity and iclass ~= "Trade Goods" then
           if targetbag == "1" then 
             PickupContainerItem(bag,slot)
             PutItemInBackpack() else
@@ -350,7 +391,7 @@ function SortRarity(targetrarity,targetbag)
     end
   end
   if SmartBagSettings["Alerts"] == true then
-  print("|cFF0066FF<SmartBag> |rGreen Items Sorted To: |cFFFFFF00" .. GreenSortButton:GetText())
+  print("|cFF0066FF<SmartBag> |rGreen Items Sorted To: |cFF66FF33" .. GreenSortButton:GetText())
   end
   ClearCursor()
 end
@@ -384,8 +425,8 @@ function SellGrey()
     end
   end
   if x > 0 and SmartBagSettings["Alerts"] == true then
-    print("|cFF0066FF<SmartBag> |rTotal Items Sold: |cFFFFFF00" .. x )
-    print("|cFF0066FF<SmartBag> |rTotal Sale Price: |cFFFFFF00" .. ConvertToWoWMoney(totalsale) )
+    print("|cFF0066FF<SmartBag> |rTotal Items Sold: |cFF66FF33" .. x )
+    print("|cFF0066FF<SmartBag> |rTotal Sale Price: |cFF66FF33" .. ConvertToWoWMoney(totalsale) )
   end
   ClearCursor()
 end
