@@ -516,6 +516,13 @@ function WhatBag(search)
   return foundbag
 end
 
+function WhatBag2(search,itemCache)
+  for each monkey in itemCache do
+    --Something Amazing!
+  end
+  return foundbag
+end
+
 function IsSetItem(itemname)
   itemsetstatus = false
   for equipset = 1,GetNumEquipmentSets() do 
@@ -530,4 +537,42 @@ function IsSetItem(itemname)
     end
   end
   return itemsetstatus
+end
+
+function WhatSet(itemname)
+  local itemset = nil
+  for equipset = 1,GetNumEquipmentSets() do 
+    name, icon, lessIndex = GetEquipmentSetInfo(equipset)
+    itemArray = GetEquipmentSetItemIDs(name);
+    for itemslot = 1,19 do 
+      if GetItemInfo(itemArray[itemslot]) then
+        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
+        if itemname == iname then itemset = name
+        end
+      end
+    end
+  end
+  return itemset
+end
+
+
+function UpdateItemCache()
+  itemCache = {}
+  for bag = 0,4 do
+    itemCache[bag] = {}
+    for slot = 1,GetContainerNumSlots(bag) do
+      itemCache[bag][slot] = {}
+      local item = GetContainerItemLink(bag,slot)
+      if item then
+        itemCache[bag][slot].name, itemCache[bag][slot].link, itemCache[bag][slot].rarity, itemCache[bag][slot].itemlevel, itemCache[bag][slot].levelreq , itemCache[bag][slot].class, itemCache[bag][slot].subclass, itemCache[bag][slot].maxstack, itemCache[bag][slot].equipslot, itemCache[bag][slot].texture, itemCache[bag][slot].vendorprice = GetItemInfo(item)
+        if IsSetItem(itemCache[bag][slot].name) == true then
+          itemCache[bag][slot].issetitem = true
+          itemCache[bag][slot].itemset = WhatSet(itemCache[bag][slot].name)
+        end
+      end
+    end
+  end
+  -- return itemCache
+  print(itemCache[1][3].name)
+  print(itemCache[1][3].itemset)
 end
