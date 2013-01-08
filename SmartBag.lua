@@ -302,6 +302,7 @@ end
 -- Sorting Functions
 -- *********************************************
 
+-- THIS ONE
 function SortContainerItem(search,targetbag)
   numberOfFreeSlots, BagType = GetContainerNumFreeSlots(BagNumberConversion(targetbag))
   if numberOfFreeSlots >= 1 then
@@ -325,54 +326,7 @@ function SortContainerItem(search,targetbag)
   ClearCursor()
 end
 
-function SortEquipmentSet(targetbag)
-  x = 0
-  for equipset = 1,GetNumEquipmentSets() do 
-    name, icon, lessIndex = GetEquipmentSetInfo(equipset)
-    itemArray = GetEquipmentSetItemIDs(name);
-    for itemslot = 1,19 do 
-      if GetItemInfo(itemArray[itemslot]) then
-        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
-        superbag = tonumber(WhatBag(iname))
-        supertarget = tonumber(BagNumberConversion(targetbag))
-        if IsEquippedItem(ilink) == 1 or superbag == supertarget then
-          --Goodtimes 
-        else
-          x = x +1
-        end        
-      end
-    end
-  end
-  numberOfFreeSlots, BagType = GetContainerNumFreeSlots(BagNumberConversion(targetbag))
-  if numberOfFreeSlots >= x then
-  for equipset = 1,GetNumEquipmentSets() do 
-    name, icon, lessIndex = GetEquipmentSetInfo(equipset)
-    itemArray = GetEquipmentSetItemIDs(name);
-    for itemslot = 1,19 do 
-      if GetItemInfo(itemArray[itemslot]) then
-        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
-        if IsEquippedItem(ilink) == 1 or WhatBag(iname) == BagNumberConversion(targetbag) then
-          --Goodtimes
-        else
-          SortContainerItem(iname,targetbag)
-        end        
-      end
-    end
-  end
-  if SmartBagSettings["Alerts"] == true then
-    print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText() )
-  end
-  else
-    if SmartBagSettings["Alerts"] == true then
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Not Enough Free Space.")
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Required Space: " .. x )
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Available Space: " .. numberOfFreeSlots)
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Target: " .. KeepEquipmentButton:GetText() )
-    end
-  end
-  ClearCursor()
-end
-
+-- THIS ONE
 function SortRarity(targetrarity,targetbag)
   for bag = 0,4 do
     for slot = 1,GetContainerNumSlots(bag) do
@@ -397,36 +351,65 @@ function SortRarity(targetrarity,targetbag)
 end
 
 function SellGrey()
-  x = 0
-  totalsale = 0
+  local x = 0
+  local totalsale = 0
+  local items = UpdateItemCache()
   for bag = 0,4 do
     for slot = 1,GetContainerNumSlots(bag) do
-      local item = GetContainerItemLink(bag,slot)
-      if item then 
-       iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(item)
+      if items[bag][slot].name and items[bag][slot].rarity == 0 and items[bag][slot].vendorPrice > 0 then
+        PickupContainerItem(bag,slot)
+        PickupMerchantItem(0)
+        totalsale = totalsale + (items[bag][slot].itemCount * items[bag][slot].vendorPrice)
+        x = x + items[bag][slot].itemCount
       end
-      if item and iRarity == 0 and ivendorPrice > 0 then
-       PickupContainerItem(bag,slot)
-       PickupMerchantItem(0)
-       itemcount = tonumber(GetItemCount(ilink))
-       totalsale = totalsale + (itemcount * tonumber(ivendorPrice))
-       x = x + itemcount
-      end
+
       for i,line in ipairs(SmartBagExtraSellItems) do
-        if iname == SmartBagExtraSellItems[i] then
-         PickupContainerItem(bag,slot)
-         PickupMerchantItem(0)
-         itemcount = tonumber(GetItemCount(ilink))
-         totalsale = totalsale + (itemcount * tonumber(ivendorPrice))
-         x = x + itemcount
+        if items[bag][slot].name == SmartBagExtraSellItems[i] then
+          PickupContainerItem(bag,slot)
+          PickupMerchantItem(0)
+          totalsale = totalsale + (items[bag][slot].itemCount * items[bag][slot].vendorPrice)
+          x = x + items[bag][slot].itemCount
         end
       end
-      iname = nil
     end
   end
   if x > 0 and SmartBagSettings["Alerts"] == true then
     print("|cFF0066FF<SmartBag> |rTotal Items Sold: |cFF66FF33" .. x )
     print("|cFF0066FF<SmartBag> |rTotal Sale Price: |cFF66FF33" .. ConvertToWoWMoney(totalsale) )
+  end
+  ClearCursor()
+end
+
+function SortEquipmentSet(targetbag)
+  local items = UpdateItemCache()
+  local x = 0
+  local tarbag = tonumber(BagNumberConversion(targetbag))
+  for bag = 0,4 do
+    for slot = 1,GetContainerNumSlots(bag) do
+      if items[bag][slot].isSetItem == true and bag ~= tarbag  then
+        x = x + 1
+      end
+    end
+  end
+  local numberOfFreeSlots, BagType = GetContainerNumFreeSlots(tarbag)
+  if numberOfFreeSlots >= x then
+    for bag = 0,4 do
+      for slot = 1,GetContainerNumSlots(bag) do
+        if items[bag][slot].isSetItem == true and bag ~= tarbag then
+          SortContainerItem(items[bag][slot].name,targetbag)
+        end
+      end
+    end
+    if SmartBagSettings["Alerts"] == true then
+      print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText() )
+    end
+  else
+    if SmartBagSettings["Alerts"] == true then
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Not Enough Free Space.")
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Required Space: " .. x )
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Available Space: " .. numberOfFreeSlots)
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Target: " .. KeepEquipmentButton:GetText() )
+    end
   end
   ClearCursor()
 end
@@ -441,6 +424,11 @@ function BagNumberConversion(value)
   if value == "21" then value = "2" end
   if value == "22" then value = "3" end
   if value == "23" then value = "4" end
+  if value == 1 then value = 0 end 
+  if value == 20 then value = 1 end
+  if value == 21 then value = 2 end
+  if value == 22 then value = 3 end
+  if value == 23 then value = 4 end
   return value
 end
 
@@ -503,26 +491,6 @@ function removeDecimal(number)
   return num
 end
 
-function WhatBag(search)
-    for bag = 0,4 do
-      for slot = 1,GetContainerNumSlots(bag) do
-        local item = GetContainerItemLink(bag,slot)
-        if item and item:find(search) then
-        foundbag = bag
-        foundslot = slot
-        end
-      end
-    end
-  return foundbag
-end
-
-function WhatBag2(search,itemCache)
-  for each monkey in itemCache do
-    --Something Amazing!
-  end
-  return foundbag
-end
-
 function IsSetItem(itemname)
   itemsetstatus = false
   for equipset = 1,GetNumEquipmentSets() do 
@@ -555,24 +523,22 @@ function WhatSet(itemname)
   return itemset
 end
 
-
 function UpdateItemCache()
-  itemCache = {}
+  local itemCache = {}
   for bag = 0,4 do
     itemCache[bag] = {}
     for slot = 1,GetContainerNumSlots(bag) do
       itemCache[bag][slot] = {}
       local item = GetContainerItemLink(bag,slot)
       if item then
-        itemCache[bag][slot].name, itemCache[bag][slot].link, itemCache[bag][slot].rarity, itemCache[bag][slot].itemlevel, itemCache[bag][slot].levelreq , itemCache[bag][slot].class, itemCache[bag][slot].subclass, itemCache[bag][slot].maxstack, itemCache[bag][slot].equipslot, itemCache[bag][slot].texture, itemCache[bag][slot].vendorprice = GetItemInfo(item)
+        itemCache[bag][slot].name, itemCache[bag][slot].link, itemCache[bag][slot].rarity, itemCache[bag][slot].itemLevel, itemCache[bag][slot].levelReq , itemCache[bag][slot].class, itemCache[bag][slot].subClass, itemCache[bag][slot].maxStack, itemCache[bag][slot].equipSlot, itemCache[bag][slot].texture, itemCache[bag][slot].vendorPrice = GetItemInfo(item)
+        texture, itemCache[bag][slot].itemCount, locked, quality, readable, lootable, itemLink = GetContainerItemInfo(bag, slot)
         if IsSetItem(itemCache[bag][slot].name) == true then
-          itemCache[bag][slot].issetitem = true
-          itemCache[bag][slot].itemset = WhatSet(itemCache[bag][slot].name)
+          itemCache[bag][slot].isSetItem = true
+          itemCache[bag][slot].itemSet = WhatSet(itemCache[bag][slot].name)
         end
       end
     end
   end
-  -- return itemCache
-  print(itemCache[1][3].name)
-  print(itemCache[1][3].itemset)
+  return itemCache
 end
