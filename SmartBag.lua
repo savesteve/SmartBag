@@ -27,7 +27,7 @@ function SmartBag_OnLoad()
 end
 
 function ExecuteSorting(quiet)
-
+  local iCache = UpdateItemCache()
 
   if quiet == true then 
     xquiet = SmartBagSettings["Alerts"]
@@ -35,17 +35,17 @@ function ExecuteSorting(quiet)
   end
   
   if SmartBagSettings["GearSetBag"] ~= "0" then
-    SortEquipmentSet(SmartBagSettings["GearSetBag"])
+    SortEquipmentSet(SmartBagSettings["GearSetBag"],iCache)
   end
   
   if SmartBagSettings["GreenSort"] ~= "0" then
-    SortRarity(2,SmartBagSettings["GreenSort"])
+    SortRarity(2,SmartBagSettings["GreenSort"],iCache)
   end
 
   if SmartBagSettings["SellGrey"] == false then
-    SmartBagESIExecute()
+    SmartBagESIExecute(iCache)
   else
-    SellGrey()
+    SellGrey(iCache)
   end
 
   if quiet == true then SmartBagSettings["Alerts"] = xquiet end
@@ -213,7 +213,6 @@ function SmartBagESIClearListButton()
   SmartBagScrollBarESI_Update()
 end
 
-
 function SmartBagESIRemoveItem(self)
   local cursorType, info1, info2  = GetCursorInfo()
   if cursorType == "item" then
@@ -241,7 +240,6 @@ function SmartBagESIOKButton()
 end
 
 function SmartBagESIAddAddButton()
-  -- print(SmartBagESIAddWindowEditBox:GetText())
   local addItemConfirm = 0
   for i,line in ipairs(SmartBagExtraSellItems) do
     if SmartBagESIAddWindowEditBox:GetText() == SmartBagExtraSellItems[i] then
@@ -267,17 +265,13 @@ function SmartBagESIAddCancelButton()
   SmartBagScrollBarESI_Update()
 end
 
-function SmartBagESIExecute()
-  x = 0
-  totalsale = 0
+function SmartBagESIExecute(itemCache)
+  local x = 0
+  local totalsale = 0
   for bag = 0,4 do
     for slot = 1,GetContainerNumSlots(bag) do
-      local item = GetContainerItemLink(bag,slot)
-      if item then 
-       iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(item)
-      end
       for i,line in ipairs(SmartBagExtraSellItems) do
-        if iname == SmartBagExtraSellItems[i] then
+        if itemCache[bag][slot].name == SmartBagExtraSellItems[i] then
          PickupContainerItem(bag,slot)
          PickupMerchantItem(0)
          itemcount = tonumber(GetItemCount(ilink))
@@ -295,7 +289,11 @@ function SmartBagESIExecute()
   ClearCursor()
 end
 
-function SmartBagESISetTooltip()
+function SmartBagESIAddCancelButton()
+  SmartBagESIAddWindow:Hide()
+  SmartBagExtraSellItemWindow:Show()
+  SmartBagExtraSellItemWindowItemFrame:Show()
+  SmartBagScrollBarESI_Update()
 end
 
 -- *********************************************
@@ -303,16 +301,12 @@ end
 -- *********************************************
 
 -- THIS ONE
-function SortContainerItem(search,targetbag)
+function SortContainerItem(search,targetbag,itemCache)
   numberOfFreeSlots, BagType = GetContainerNumFreeSlots(BagNumberConversion(targetbag))
   if numberOfFreeSlots >= 1 then
     for bag = 0,4 do
       for slot = 1,GetContainerNumSlots(bag) do
-        local item = GetContainerItemLink(bag,slot)
-        if item then 
-          iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(item)
-        end
-        if item and search == iname then
+        if itemCache[bag][slot].name == search then
           if targetbag == "1" then 
             PickupContainerItem(bag,slot)
             PutItemInBackpack() else
@@ -326,20 +320,15 @@ function SortContainerItem(search,targetbag)
   ClearCursor()
 end
 
--- THIS ONE
-function SortRarity(targetrarity,targetbag)
+function SortRarity(targetrarity,targetbag,itemCache)
   for bag = 0,4 do
     for slot = 1,GetContainerNumSlots(bag) do
-      local item = GetContainerItemLink(bag,slot)
-      if item then
-        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(item)
-        if iRarity == targetrarity and iclass ~= "Trade Goods" then
-          if targetbag == "1" then 
-            PickupContainerItem(bag,slot)
-            PutItemInBackpack() else
-            PickupContainerItem(bag,slot)
-            PutItemInBag(targetbag)
-          end
+      if itemCache[bag][slot].rarity == targetrarity and itemCache[bag][slot].class ~= "Trade Goods" then
+        if targetbag == "1" then 
+          PickupContainerItem(bag,slot)
+          PutItemInBackpack() else
+          PickupContainerItem(bag,slot)
+          PutItemInBag(targetbag)
         end
       end
     end
@@ -350,25 +339,24 @@ function SortRarity(targetrarity,targetbag)
   ClearCursor()
 end
 
-function SellGrey()
+function SellGrey(itemCache)
   local x = 0
   local totalsale = 0
-  local items = UpdateItemCache()
   for bag = 0,4 do
     for slot = 1,GetContainerNumSlots(bag) do
-      if items[bag][slot].name and items[bag][slot].rarity == 0 and items[bag][slot].vendorPrice > 0 then
+      if itemCache[bag][slot].name and itemCache[bag][slot].rarity == 0 and itemCache[bag][slot].vendorPrice > 0 then
         PickupContainerItem(bag,slot)
         PickupMerchantItem(0)
-        totalsale = totalsale + (items[bag][slot].itemCount * items[bag][slot].vendorPrice)
-        x = x + items[bag][slot].itemCount
+        totalsale = totalsale + (itemCache[bag][slot].itemCount * itemCache[bag][slot].vendorPrice)
+        x = x + itemCache[bag][slot].itemCount
       end
 
       for i,line in ipairs(SmartBagExtraSellItems) do
-        if items[bag][slot].name == SmartBagExtraSellItems[i] then
+        if itemCache[bag][slot].name == SmartBagExtraSellItems[i] then
           PickupContainerItem(bag,slot)
           PickupMerchantItem(0)
-          totalsale = totalsale + (items[bag][slot].itemCount * items[bag][slot].vendorPrice)
-          x = x + items[bag][slot].itemCount
+          totalsale = totalsale + (itemCache[bag][slot].itemCount * itemCache[bag][slot].vendorPrice)
+          x = x + itemCache[bag][slot].itemCount
         end
       end
     end
@@ -380,13 +368,12 @@ function SellGrey()
   ClearCursor()
 end
 
-function SortEquipmentSet(targetbag)
-  local items = UpdateItemCache()
+function SortEquipmentSet(targetbag, itemCache)
   local x = 0
   local tarbag = tonumber(BagNumberConversion(targetbag))
   for bag = 0,4 do
     for slot = 1,GetContainerNumSlots(bag) do
-      if items[bag][slot].isSetItem == true and bag ~= tarbag  then
+      if itemCache[bag][slot].isSetItem == true and bag ~= tarbag  then
         x = x + 1
       end
     end
@@ -395,8 +382,8 @@ function SortEquipmentSet(targetbag)
   if numberOfFreeSlots >= x then
     for bag = 0,4 do
       for slot = 1,GetContainerNumSlots(bag) do
-        if items[bag][slot].isSetItem == true and bag ~= tarbag then
-          SortContainerItem(items[bag][slot].name,targetbag)
+        if itemCache[bag][slot].isSetItem == true and bag ~= tarbag then
+          SortContainerItem(itemCache[bag][slot].name,targetbag,itemCache)
         end
       end
     end
