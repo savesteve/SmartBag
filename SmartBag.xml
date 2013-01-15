@@ -10,6 +10,7 @@
       self:RegisterEvent("MERCHANT_SHOW");
       self:RegisterEvent("ADDON_LOADED");
       self:RegisterEvent("PLAYER_REGEN_ENABLED");
+      self:RegisterEvent("BANKFRAME_OPENED");
       <!--       self:RegisterEvent("LeftButton"); -->
     </OnLoad>
     <OnEvent function="SmartBag_EventHandler"/>
