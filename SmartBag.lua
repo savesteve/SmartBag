@@ -38,11 +38,17 @@ function ExecuteSorting(quiet)
   if SmartBagSettings["GearSetBag"] ~= "0" then
     for equipset = 1,GetNumEquipmentSets() do 
       local name, icon, lessIndex = GetEquipmentSetInfo(equipset)
-      print(name)
       sortStatus = SortEquipmentSet(SmartBagSettings["GearSetBag"],name,iCache)
-    end
-    if sortStatus == true then
-      print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText())
+      if sortStatus.state == true then
+        print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText())
+      end
+      if sortStatus.state == false then
+        print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Unable to sort set: " .. name)
+        print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Not Enough Free Space.")
+        print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Required Space: " .. sortStatus.reqSpace)
+        print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Available Space: " .. sortStatus.numberOfFreeSlots)
+        print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Target: " .. KeepEquipmentButton:GetText())
+      end
     end
   end
   
@@ -384,6 +390,7 @@ end
 function SortEquipmentSet(targetbag, itemSet, itemCache)
   local x = 0
   local tarbag = tonumber(BagNumberConversion(targetbag))
+  local status = {}
   for bag = 0,NUM_BAG_SLOTS do
     for slot = 1,GetContainerNumSlots(bag) do
       if itemCache[bag][slot].isSetItem == true and itemCache[bag][slot].itemSet == itemSet and bag ~= tarbag  then
@@ -400,9 +407,11 @@ function SortEquipmentSet(targetbag, itemSet, itemCache)
         end
       end
     end
-    status = true
+    status.state = true
   else
-    status = false
+    status.state = false
+    status.reqSpace = x
+    status.numberOfFreeSlots = numberOfFreeSlots
   end
   ClearCursor()
   return status
