@@ -36,20 +36,7 @@ function ExecuteSorting(quiet)
   end
   
   if SmartBagSettings["GearSetBag"] ~= "0" then
-    for equipset = 1,GetNumEquipmentSets() do 
-      local name, icon, lessIndex = GetEquipmentSetInfo(equipset)
-      sortStatus = SortEquipmentSet(SmartBagSettings["GearSetBag"],name,iCache)
-      if sortStatus.state == true then
-        print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText())
-      end
-      if sortStatus.state == false then
-        print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Unable to sort set: " .. name)
-        print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Not Enough Free Space.")
-        print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Required Space: " .. sortStatus.reqSpace)
-        print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Available Space: " .. sortStatus.numberOfFreeSlots)
-        print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Target: " .. KeepEquipmentButton:GetText())
-      end
-    end
+    SorEquipmentSets(SmartBagSettings["GearSetBag"],iCache)
   end
   
   if SmartBagSettings["GreenSort"] ~= "0" then
@@ -318,8 +305,6 @@ end
 -- *********************************************
 -- Sorting Functions
 -- *********************************************
-
--- THIS ONE
 function SortContainerItem(search,targetbag,itemCache)
   numberOfFreeSlots, BagType = GetContainerNumFreeSlots(BagNumberConversion(targetbag))
   if numberOfFreeSlots >= 1 then
@@ -431,6 +416,23 @@ function BankGearSet(command,itemset,targetBag,itemCache)
           -- do something crafty
         end
       end
+    end
+  end
+end
+
+function SorEquipmentSets(targetbag,iCache)
+  for equipset = 1,GetNumEquipmentSets() do 
+    local name, icon, lessIndex = GetEquipmentSetInfo(equipset)
+    sortStatus = SortEquipmentSet(targetbag,name,iCache)
+    if sortStatus.state == true then
+      print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText())
+    end
+    if sortStatus.state == false then
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Unable to sort set: " .. name)
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Not Enough Free Space.")
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Required Space: " .. sortStatus.reqSpace)
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Available Space: " .. sortStatus.numberOfFreeSlots)
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Target: " .. KeepEquipmentButton:GetText())
     end
   end
 end
