@@ -36,7 +36,7 @@ function ExecuteSorting(quiet)
   end
   
   if SmartBagSettings["GearSetBag"] ~= "0" then
-    SorEquipmentSets(SmartBagSettings["GearSetBag"],iCache)
+    SortEquipmentSets(SmartBagSettings["GearSetBag"],iCache)
   end
   
   if SmartBagSettings["GreenSort"] ~= "0" then
@@ -420,21 +420,37 @@ function BankGearSet(command,itemset,targetBag,itemCache)
   end
 end
 
-function SorEquipmentSets(targetbag,iCache)
-  for equipset = 1,GetNumEquipmentSets() do 
-    local name, icon, lessIndex = GetEquipmentSetInfo(equipset)
-    sortStatus = SortEquipmentSet(targetbag,name,iCache)
-    if sortStatus.state == true then
-      print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText())
-    end
-    if sortStatus.state == false then
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Unable to sort set: " .. name)
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Not Enough Free Space.")
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Required Space: " .. sortStatus.reqSpace)
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Available Space: " .. sortStatus.numberOfFreeSlots)
-      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Target: " .. KeepEquipmentButton:GetText())
+function SortEquipmentSets(targetbag,itemCache)
+  local x = 0
+  local tarbag = tonumber(BagNumberConversion(targetbag))
+  for bag = 0,4 do
+    for slot = 1,GetContainerNumSlots(bag) do
+      if itemCache[bag][slot].isSetItem == true and bag ~= tarbag  then
+        x = x + 1
+      end
     end
   end
+  local numberOfFreeSlots, BagType = GetContainerNumFreeSlots(tarbag)
+  if numberOfFreeSlots >= x then
+    for bag = 0,4 do
+      for slot = 1,GetContainerNumSlots(bag) do
+        if itemCache[bag][slot].isSetItem == true and bag ~= tarbag then
+          SortContainerItem(itemCache[bag][slot].name,targetbag,itemCache)
+        end
+      end
+    end
+    if SmartBagSettings["Alerts"] == true then
+      print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText() )
+    end
+  else
+    if SmartBagSettings["Alerts"] == true then
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Not Enough Free Space.")
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Required Space: " .. x )
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Available Space: " .. numberOfFreeSlots)
+      print("|cFF0066FF<SmartBag> |rEquipment Sorting: |cFFFFFF00Target: " .. KeepEquipmentButton:GetText() )
+    end
+  end
+  ClearCursor()
 end
 
 -- *********************************************
