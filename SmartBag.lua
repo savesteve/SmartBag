@@ -402,24 +402,6 @@ function SortEquipmentSet(targetbag, itemSet, itemCache)
   return status
 end
 
-function SBTest()
-  local iCache = UpdateItemCache()
-  SortEquipmentSet(5,"Tank",iCache)
-  print("DONE!")
-end
-
-function BankGearSet(command,itemset,targetBag,itemCache)
-  for bag = 0,NUM_BAG_SLOTS do
-    for slot = 1,GetContainerNumSlots(bag) do
-      if itemCache[bag][slot].itemSet == itemset then
-        if command == "deposit" then
-          -- do something crafty
-        end
-      end
-    end
-  end
-end
-
 function SortEquipmentSets(targetbag,itemCache)
   local x = 0
   local tarbag = tonumber(BagNumberConversion(targetbag))
