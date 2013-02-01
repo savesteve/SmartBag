@@ -10,8 +10,6 @@
       self:RegisterEvent("MERCHANT_SHOW");
       self:RegisterEvent("ADDON_LOADED");
       self:RegisterEvent("PLAYER_REGEN_ENABLED");
-      self:RegisterEvent("BANKFRAME_OPENED");
-      <!--       self:RegisterEvent("LeftButton"); -->
     </OnLoad>
     <OnEvent function="SmartBag_EventHandler"/>
   </Scripts>
@@ -55,11 +53,21 @@
   </Button>
   <Button inherits="UIPanelButtonTemplate" name="KeepEquipmentButton">
     <Size x="80" y="35"/>
-    <Anchors><Anchor point="TOP" x="130" y="-75"/></Anchors>
+    <Anchors><Anchor point="TOP" x="40" y="-75"/></Anchors>
     <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
     <Scripts>
       <OnClick>
         KeepEquipmentButton_OnClick();
+      </OnClick>
+    </Scripts>
+  </Button>
+  <Button inherits="UIPanelButtonTemplate" name="KeepEquipmentButton2">
+    <Size x="80" y="35"/>
+    <Anchors><Anchor point="TOP" x="130" y="-75"/></Anchors>
+    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+    <Scripts>
+      <OnClick>
+        KeepEquipmentButton2_OnClick();
       </OnClick>
     </Scripts>
   </Button>
@@ -83,9 +91,19 @@
       </OnClick>
     </Scripts>
   </Button>
+  <Button inherits="UIPanelButtonTemplate" name="OOCSortButton">
+    <Size x="80" y="35"/>
+    <Anchors><Anchor point="TOP" x="130" y="-200"/></Anchors>
+    <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
+    <Scripts>
+      <OnClick>
+        OOCSortButton_OnClick();
+      </OnClick>
+    </Scripts>
+  </Button>
   <Button inherits="UIPanelButtonTemplate" name="ExtraSellItemButton" text="Extra Sell Items">
     <Size x="150" y="35"/>
-    <Anchors><Anchor point="TOP" x="0" y="-220"/></Anchors>
+    <Anchors><Anchor point="TOP" x="0" y="-260"/></Anchors>
     <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
     <Scripts>
       <OnClick>
@@ -106,7 +124,7 @@
 </Frames>
 <Layers>
   <Layer level="BACKROUND">
-    <FontString name="SmartBagTitle" text="SmartBag v3.0" inherits="GameFontNormal">
+    <FontString name="SmartBagTitle" text="SmartBag v4.0" inherits="GameFontNormal">
       <Size>
         <AbsDimension x="150" y="12"/>
       </Size>
@@ -137,7 +155,19 @@
       <Anchors>
         <Anchor point="TOP">
           <Offset>
-            <AbsDimension x="-105" y="-90"/>
+            <AbsDimension x="-105" y="-80"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+    <FontString name="EquipmentSortText" text="(Primary / Secondary)" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="-105" y="-93"/>
           </Offset>
         </Anchor>
       </Anchors>
@@ -162,6 +192,18 @@
         <Anchor point="TOP">
           <Offset>
             <AbsDimension x="-105" y="-170"/>
+          </Offset>
+        </Anchor>
+      </Anchors>
+    </FontString>
+      <FontString name="AlertText" text="Sort after combat:" inherits="GameFontNormal">
+      <Size>
+        <AbsDimension x="150" y="12"/>
+      </Size>
+      <Anchors>
+        <Anchor point="TOP">
+          <Offset>
+            <AbsDimension x="-105" y="-210"/>
           </Offset>
         </Anchor>
       </Anchors>

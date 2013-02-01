@@ -2,24 +2,26 @@
 -- Addon Setup
 -- *********************************************
 function SmartBag_OnLoad()
-	print("|cFF0066FF<SmartBag |cFFFFFF00v3.0|cFF0066FF>")
+	print("|cFF0066FF<SmartBag |cFFFFFF00v4.0|cFF0066FF>")
 	SlashCmdList["SMARTBAG"] = SmartBag_SlashCommand
 	SLASH_SMARTBAG1 = "/smartbag"
 	SLASH_SMARTBAG2 = "/sb"
 
   if (not SmartBagSettings) then
-  SmartBagSettings = {}
-  SmartBagSettings["AutoSellGrey"]=false
-  SmartBagSettings["SortGrey"]="0"
-  SmartBagSettings["GearSetBag"]="0"
-  SmartBagSettings["FirstRun"] = "0"
-  SmartBagSettings["Alerts"]=true
-  SmartBagSettings["GreenSort"]="0"
+    SmartBagSettings = {}
+    SmartBagSettings["AutoSellGrey"]=false
+    SmartBagSettings["SortGrey"]="0"
+    SmartBagSettings["GearSetBag"]="0"
+    SmartBagSettings["GearSetBag2"]="0"
+    SmartBagSettings["FirstRun"] = "0"
+    SmartBagSettings["Alerts"]=true
+    SmartBagSettings["GreenSort"]="0"
+    SmartBagSettings["OOCSorting"]=false
   end
   if (not SmartBagExtraSellItems) then
-  SmartBagExtraSellItems = {}
+    SmartBagExtraSellItems = {}
   end
-  
+ 
   if SmartBagSettings["Alerts"] == true or SmartBagSettings["Alerts"] == false then
   else
     SmartBagSettings["Alerts"] = true
@@ -36,7 +38,7 @@ function ExecuteSorting(quiet)
   end
   
   if SmartBagSettings["GearSetBag"] ~= "0" then
-    SortEquipmentSets(SmartBagSettings["GearSetBag"],iCache)
+    SortEquipmentSets(SmartBagSettings["GearSetBag"],SmartBagSettings["GearSetBag2"],iCache)
   end
   
   if SmartBagSettings["GreenSort"] ~= "0" then
@@ -54,19 +56,18 @@ end
 
 function SmartBag_EventHandler(self, event, ...)
 
- if event == "BANKFRAME_OPENED" then
-   --Do the magic
- end
-
  if event == "MERCHANT_SHOW" then
   ExecuteSorting()
  end
 
  if event == "PLAYER_REGEN_ENABLED" then
-  ExecuteSorting(true)
+  if SmartBagSettings["OOCSorting"] == true then
+    ExecuteSorting(true)
+  end
  end
 
  if event == "ADDON_LOADED" then
+
   if SmartBagSettings["FirstRun"] == "0" then
     SmartBagSettings["FirstRun"] = "1"
     SmartBagSettingsWindow:Show() 
@@ -82,14 +83,26 @@ function SmartBag_EventHandler(self, event, ...)
     SmartBagSettings["GearSetBag"]="0"
     SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"])
   end
+  if  SmartBagSettings["GearSetBag2"] then 
+    SetButttonText(KeepEquipmentButton2,SmartBagSettings["GearSetBag2"]) else
+    SmartBagSettings["GearSetBag2"]="0"
+    SetButttonText(KeepEquipmentButton2,SmartBagSettings["GearSetBag2"])
+  end
   if  SmartBagSettings["GreenSort"] then 
     SetButttonText(GreenSortButton,SmartBagSettings["GreenSort"]) else
     SmartBagSettings["GreenSort"]="0"
     SetButttonText(GreenSortButton,SmartBagSettings["GreenSort"])
   end
   
+  if SmartBagSettings["OOCSorting"] then
+    SetButttonText(OOCSortButton,SmartBagSettings["OOCSorting"]) else
+    SmartBagSettings["OOCSorting"]=true
+    SetButttonText(OOCSortButton,SmartBagSettings["OOCSorting"])
+  end
+
   SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
-    if AlertTextButton:GetText() == nil then 
+
+  if AlertTextButton:GetText() == nil then 
     SmartBagSettings["Alerts"] = true
     SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
   end
@@ -110,8 +123,23 @@ function SellGreyButton_OnClick()
 end
 
 function KeepEquipmentButton_OnClick()
-   SmartBagSettings["GearSetBag"] = UpdateSettingChoice(SmartBagSettings["GearSetBag"])
-   SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"])
+  SmartBagSettings["GearSetBag"] = UpdateSettingChoice(SmartBagSettings["GearSetBag"])
+  if SmartBagSettings["GearSetBag"] == SmartBagSettings["GearSetBag2"] then
+    if SmartBagSettings["GearSetBag"] ~= "0" then
+      SmartBagSettings["GearSetBag"] = UpdateSettingChoice(SmartBagSettings["GearSetBag"])
+    end
+  end
+  SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"])
+end
+
+function KeepEquipmentButton2_OnClick()
+  SmartBagSettings["GearSetBag2"] = UpdateSettingChoice(SmartBagSettings["GearSetBag2"])
+  if SmartBagSettings["GearSetBag2"] == SmartBagSettings["GearSetBag"] then
+    if SmartBagSettings["GearSetBag2"] ~= "0" then
+      SmartBagSettings["GearSetBag2"] = UpdateSettingChoice(SmartBagSettings["GearSetBag2"])
+    end
+  end
+  SetButttonText(KeepEquipmentButton2,SmartBagSettings["GearSetBag2"])
 end
 
 function GreenSortButton_OnClick()
@@ -122,6 +150,10 @@ end
 function AlertTextButton_OnClick()
    SmartBagSettings["Alerts"] = UpdateSettingChoice(SmartBagSettings["Alerts"])
    SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
+end
+function OOCSortButton_OnClick()
+  SmartBagSettings["OOCSorting"] = UpdateSettingChoice(SmartBagSettings["OOCSorting"])
+  SetButttonText(OOCSortButton,SmartBagSettings["OOCSorting"])
 end
 
 function OkButton_OnClick()
@@ -402,9 +434,18 @@ function SortEquipmentSet(targetbag, itemSet, itemCache)
   return status
 end
 
-function SortEquipmentSets(targetbag,itemCache)
+--- NEED to work on edge cases, but working in general.
+--- Need to handle targetbag2 being "None"
+--- Change sorting messages to list both bags
+
+function SortEquipmentSets(targetbag,targetbag2,itemCache)
   local x = 0
   local tarbag = tonumber(BagNumberConversion(targetbag))
+  local tarbag2 = tonumber(BagNumberConversion(targetbag2))
+  local altMessage = false
+  local numberOfFreeSlots2, BagType2
+  local numberOfFreeSlotsTotal
+
   for bag = 0,4 do
     for slot = 1,GetContainerNumSlots(bag) do
       if itemCache[bag][slot].isSetItem == true and bag ~= tarbag  then
@@ -413,16 +454,31 @@ function SortEquipmentSets(targetbag,itemCache)
     end
   end
   local numberOfFreeSlots, BagType = GetContainerNumFreeSlots(tarbag)
-  if numberOfFreeSlots >= x then
+  numberOfFreeSlotsTotal = numberOfFreeSlots
+  if targetbag2 ~= "0" then 
+    numberOfFreeSlots2, BagType2 =  GetContainerNumFreeSlots(tarbag2)
+    numberOfFreeSlotsTotal = numberOfFreeSlots + numberOfFreeSlots2
+  end
+  if numberOfFreeSlotsTotal >= x then
     for bag = 0,4 do
       for slot = 1,GetContainerNumSlots(bag) do
         if itemCache[bag][slot].isSetItem == true and bag ~= tarbag then
-          SortContainerItem(itemCache[bag][slot].name,targetbag,itemCache)
+          if numberOfFreeSlots > 0 then
+            SortContainerItem(itemCache[bag][slot].name,targetbag,itemCache)
+            numberOfFreeSlots = numberOfFreeSlots - 1
+          else
+            SortContainerItem(itemCache[bag][slot].name,targetbag2,itemCache)
+            altMessage = true
+          end
         end
       end
     end
     if SmartBagSettings["Alerts"] == true then
-      print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText() )
+      if altMessage == true then
+        print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText() .. "," .. KeepEquipmentButton2:GetText())
+      else
+        print("|cFF0066FF<SmartBag> |rGear Sorted To: |cFF66FF33" .. KeepEquipmentButton:GetText() )
+      end
     end
   else
     if SmartBagSettings["Alerts"] == true then
