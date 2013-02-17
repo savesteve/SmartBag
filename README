@@ -4,11 +4,7 @@ A World of Warcraft Addon
 This addon has the following features:
 
 * Automatic sorting of items into a specific bag based on:
-- Name
 - Rarity
 - Gear set
-- Item famliy (Tradeskill items: Enchanting materials, ore, herbs, ect)
 
 * Automatic grey item selling
-
-* Quick collection of non-equipment set items for disenchanting/selling
