@@ -2,7 +2,7 @@
 -- Addon Setup
 -- *********************************************
 function SmartBag_OnLoad()
-	print("|cFF0066FF<SmartBag |cFFFFFF00v5.2|cFF0066FF>")
+	print("|cFF0066FF<SmartBag |cFFFFFF00v5.3|cFF0066FF>")
 	SlashCmdList["SMARTBAG"] = SmartBag_SlashCommand
 	SLASH_SMARTBAG1 = "/smartbag"
 	SLASH_SMARTBAG2 = "/sb"
@@ -45,7 +45,7 @@ function ExecuteSorting(quiet)
     SortRarity(2,SmartBagSettings["GreenSort"],iCache)
   end
 
-  if SmartBagSettings["SellGrey"] == false then
+  if SmartBagSettings["AutoSellGrey"] == false then
     SmartBagESIExecute(iCache)
   else
     SellGrey(iCache)
