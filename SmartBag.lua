@@ -78,16 +78,19 @@ function SmartBag_EventHandler(self, event, ...)
     SmartBagSettings["AutoSellGrey"] = false
     SetButttonText(SellGreyButton,SmartBagSettings["AutoSellGrey"])
   end
+  
   if  SmartBagSettings["GearSetBag"] then 
     SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"]) else
     SmartBagSettings["GearSetBag"]="0"
     SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"])
   end
+  
   if  SmartBagSettings["GearSetBag2"] then 
     SetButttonText(KeepEquipmentButton2,SmartBagSettings["GearSetBag2"]) else
     SmartBagSettings["GearSetBag2"]="0"
     SetButttonText(KeepEquipmentButton2,SmartBagSettings["GearSetBag2"])
   end
+  
   if  SmartBagSettings["GreenSort"] then 
     SetButttonText(GreenSortButton,SmartBagSettings["GreenSort"]) else
     SmartBagSettings["GreenSort"]="0"
@@ -106,6 +109,7 @@ function SmartBag_EventHandler(self, event, ...)
     SmartBagSettings["Alerts"] = true
     SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
   end
+  
  end
 end
 

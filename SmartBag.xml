@@ -87,8 +87,8 @@
     <Texture setAllPoints="true" file="Interface\BUTTONS\CancelButton-Up" alphaMode="ADD"/>
     <Scripts>
       <OnClick>
-        AlertTextButton_OnClick();
-      </OnClick>
+        AlertTextButton_OnClick
+              </OnClick>
     </Scripts>
   </Button>
   <Button inherits="UIPanelButtonTemplate" name="OOCSortButton">
