@@ -70,7 +70,7 @@ function SmartBag_EventHandler(self, event, ...)
 
   if SmartBagSettings["FirstRun"] == "0" then
     SmartBagSettings["FirstRun"] = "1"
-    SmartBagSettingsWindow:Show() 
+    SmartBagSettingsWindow:Show()
   end
 
   if  SmartBagSettings["AutoSellGrey"] then 
@@ -81,32 +81,31 @@ function SmartBag_EventHandler(self, event, ...)
   
   if  SmartBagSettings["GearSetBag"] then 
     SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"]) else
-    SmartBagSettings["GearSetBag"]="0"
+    SmartBagSettings["GearSetBag"] = "0"
     SetButttonText(KeepEquipmentButton,SmartBagSettings["GearSetBag"])
   end
   
   if  SmartBagSettings["GearSetBag2"] then 
     SetButttonText(KeepEquipmentButton2,SmartBagSettings["GearSetBag2"]) else
-    SmartBagSettings["GearSetBag2"]="0"
+    SmartBagSettings["GearSetBag2"] = "0"
     SetButttonText(KeepEquipmentButton2,SmartBagSettings["GearSetBag2"])
   end
   
   if  SmartBagSettings["GreenSort"] then 
     SetButttonText(GreenSortButton,SmartBagSettings["GreenSort"]) else
-    SmartBagSettings["GreenSort"]="0"
+    SmartBagSettings["GreenSort"] = "0"
     SetButttonText(GreenSortButton,SmartBagSettings["GreenSort"])
   end
   
   if SmartBagSettings["OOCSorting"] then
     SetButttonText(OOCSortButton,SmartBagSettings["OOCSorting"]) else
-    SmartBagSettings["OOCSorting"]=true
+    SmartBagSettings["OOCSorting"] = true
     SetButttonText(OOCSortButton,SmartBagSettings["OOCSorting"])
   end
 
-  SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
-
   if AlertTextButton:GetText() == nil then 
     SmartBagSettings["Alerts"] = true
+    SetButttonText(AlertTextButton,SmartBagSettings["Alerts"]) else
     SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
   end
   
