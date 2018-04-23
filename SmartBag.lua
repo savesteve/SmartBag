@@ -2,7 +2,7 @@
 -- Addon Setup
 -- *********************************************
 function SmartBag_OnLoad()
-	print("|cFF0066FF<SmartBag |cFFFFFF00v5.4|cFF0066FF>")
+	print("|cFF0066FF<SmartBag 3 |cFFFFFF00v0.1|cFF0066FF>")
 	SlashCmdList["SMARTBAG"] = SmartBag_SlashCommand
 	SLASH_SMARTBAG1 = "/smartbag"
 	SLASH_SMARTBAG2 = "/sb"
@@ -21,11 +21,12 @@ function SmartBag_OnLoad()
   if (not SmartBagExtraSellItems) then
     SmartBagExtraSellItems = {}
   end
- 
-  if SmartBagSettings["Alerts"] == true or SmartBagSettings["Alerts"] == false then
-  else
-    SmartBagSettings["Alerts"] = true
-  end
+  
+  -- What is this doing?!?
+  --if SmartBagSettings["Alerts"] == true or SmartBagSettings["Alerts"] == false then
+  --else
+  --  SmartBagSettings["Alerts"] = true
+  --end
 end
 
 function ExecuteSorting(quiet)
@@ -154,6 +155,7 @@ function AlertTextButton_OnClick()
    SmartBagSettings["Alerts"] = UpdateSettingChoice(SmartBagSettings["Alerts"])
    SetButttonText(AlertTextButton,SmartBagSettings["Alerts"])
 end
+
 function OOCSortButton_OnClick()
   SmartBagSettings["OOCSorting"] = UpdateSettingChoice(SmartBagSettings["OOCSorting"])
   SetButttonText(OOCSortButton,SmartBagSettings["OOCSorting"])
@@ -576,9 +578,9 @@ function IsSetItem(itemname)
   for equipset = 1,GetNumEquipmentSets() do 
     name, icon, lessIndex = GetEquipmentSetInfo(equipset)
     itemArray = GetEquipmentSetItemIDs(name);
-    for itemslot = 1,19 do 
+    for itemslot = 1,15 do 
       if GetItemInfo(itemArray[itemslot]) then
-        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
+        iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice, iClassID, iSubClass, bindType, expacID, iSetID, isCrafting = GetItemInfo(itemArray[itemslot])
         if itemname == iname then itemsetstatus =true
         end
       end
@@ -592,7 +594,7 @@ function WhatSet(itemname)
   for equipset = 1,GetNumEquipmentSets() do 
     name, icon, lessIndex = GetEquipmentSetInfo(equipset)
     itemArray = GetEquipmentSetItemIDs(name);
-    for itemslot = 1,19 do 
+    for itemslot = 1,15 do 
       if GetItemInfo(itemArray[itemslot]) then
         iname, ilink, iRarity, iLevel, ireqLevel, iclass, isubclass, imaxStack, iequipSlot, itexture, ivendorPrice = GetItemInfo(itemArray[itemslot])
         if itemname == iname then itemset = name
